@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="base.definition"
+		template="WEB-INF/tiles/layout.jsp">
+		<put-attribute name="title" value="Yerba Market" />
+		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="login" value="footer" />
+	</definition>
+	
+	<definition name="footer" template="/WEB-INF/tiles/footer.jsp">
+	</definition>
+
+	<definition name="index" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/index.jsp" />
+	</definition>
+	
+	<definition name="login" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+	</definition>
+	
+	<definition name="accesories" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/accesories.jsp" />
+	</definition>
+	
+	<definition name="403" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/403.jsp" />
+	</definition>
+	
+	<definition name="admin" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/admin.jsp" />
+	</definition>
+	
+	<definition name="profile" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
+	</definition>
+	 
+	 <definition name="order" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/order.jsp" />
+	</definition>
+	
+	 <definition name="register" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/register.jsp" />
+	</definition>
+	
+	<definition name="reg" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/reg.jsp" />
+	</definition>
+	
+	<definition name="basket" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/basket.jsp" />
+	</definition>
+	
+	<definition name="products" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/products.jsp" />
+	</definition>
+	
+	<definition name="add-to-basket" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/addToBasket.jsp" />
+	</definition>
+ 
+</tiles-definitions>
