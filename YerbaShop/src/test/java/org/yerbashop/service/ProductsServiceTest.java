@@ -20,53 +20,53 @@ import org.yerbashop.model.Products;
 public class ProductsServiceTest {
 
 	@Mock
-    private ProductsDao productsDao;
+	private ProductsDao productsDao;
 
-    @InjectMocks
-    private ProductsService productsService;
-    
-    List<Products> products;
-    
-    @Before
-    public void setUp() {
-    	
-    }
-    
-    private List<Products> productsList(){
-    	products = new ArrayList<Products>();
-    	
-        Products p1 = new Products();
-        Products p2 = new Products();
-        Products p3 = new Products();
-    	
+	@InjectMocks
+	private ProductsService productsService;
+
+	List<Products> products;
+
+	@Before
+	public void setUp() {
+
+	}
+
+	private List<Products> productsList(){
+		products = new ArrayList<Products>();
+
+		Products p1 = new Products();
+		Products p2 = new Products();
+		Products p3 = new Products();
+
 		p1.setName("Yerba Mate");
 		p1.setCategory("classicYerba");
-		
+
 		p2.setName("Green Mate");
 		p2.setCategory("flavouredYerba");
 
 		p3.setName("Metal Gourd");
 		p3.setCategory("gourdsAccesories");
-		
+
 		products.add(p1);
 		products.add(p2);
 		products.add(p3);
-		
-    	return products;
-    }
-    
-    @Test
-    public void shouldGiveList_whenMethodCalledCorrectly(){
-    	when(productsDao.getAllProducts()).thenReturn(productsList());
-        assertEquals(productsService.getProductList(), products);
-        assertEquals(products.get(0).getName(),"Yerba Mate");
-    }
-    
-   @Test(expected = NullPointerException.class)
-    public void shouldThrowNullPointerException_whenListWasNotInitialized() {
-	   	when(productsDao.getAllProducts()).thenReturn(products);
-	   	Products product = productsService.getProductList().get(0);
-    	assertNull(product);
-    }
+
+		return products;
+	}
+
+	@Test
+	public void shouldGiveList_whenMethodCalledCorrectly(){
+		when(productsDao.getAllProducts()).thenReturn(productsList());
+		assertEquals(productsService.getProductList(), products);
+		assertEquals(products.get(0).getName(),"Yerba Mate");
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void shouldThrowNullPointerException_whenListWasNotInitialized() {
+		when(productsDao.getAllProducts()).thenReturn(products);
+		Products product = productsService.getProductList().get(0);
+		assertNull(product);
+	}
 
 }

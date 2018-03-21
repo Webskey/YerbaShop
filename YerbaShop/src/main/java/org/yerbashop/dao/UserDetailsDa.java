@@ -8,11 +8,11 @@ import org.yerbashop.model.Users;
 @Repository
 public class UserDetailsDa  {
 
-  @Autowired
-  private SessionFactory sessionFactory;
+	@Autowired
+	private SessionFactory sessionFactory;
 
-  public Users findUserByUsername(String username) {
-	  
-    return sessionFactory.getCurrentSession().get(Users.class, username);
-  }
+	public Users findUserByUsername(String username) {
+
+		return sessionFactory.getCurrentSession().get(Users.class, username);
+	}
 }

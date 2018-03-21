@@ -8,23 +8,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRODUCTS")
 public class Products{
-	
+
 	@Id
 	@Column(name = "products_id")
 	private int id;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "PRICE")
 	private int price;
-	
+
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
 	@Column(name = "IMAGE")
 	private String image;
-	
+
 	@Column(name = "CATEGORY")
 	private String category;
 
@@ -38,46 +38,46 @@ public class Products{
 	public void setId(int id){
 		this.id = id;
 	}
-	
+
 	public int getId(){
 		return id;
 	}
 	public void setName(String name){
 		this.name = name;
 	}
-	
+
 	public String getName(){
 		return name;
 	}
-	
+
 	public void setPrice(int price){
 		this.price = price;
 	}
-	
+
 	public int getPrice(){
 		return price;
 	}
-	
+
 	public void setDescription(String description){
 		this.description = description;
 	}
-	
+
 	public String getDescription(){
 		return description;
 	}
-	
+
 	public void setImage(String image){
 		this.image = image;
 	}
-	
+
 	public String getImage(){
 		return image;
 	}
-	
+
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+
 	public String getCategory() {
 		return category;
 	}

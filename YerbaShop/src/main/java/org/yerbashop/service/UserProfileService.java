@@ -11,10 +11,10 @@ public class UserProfileService {
 
 	@Autowired
 	private UserDetailsDa userDetailsDao;
-	
+
 	@Transactional(readOnly = true)
 	public Users getUser(String username){
-		
+
 		return userDetailsDao.findUserByUsername(username);
 	}
 }

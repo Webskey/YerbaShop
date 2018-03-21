@@ -15,13 +15,13 @@ public class UserRegisterService {
 
 	@Autowired
 	private SaveDao saveDao;
-	
+
 	private Users user;
 	private UserRoles userRoles;
-	
+
 	@Transactional
 	public void register(UsersDTO userDTO) throws ConstraintViolationException{
-		
+
 		this.user = new Users();
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
@@ -32,13 +32,13 @@ public class UserRegisterService {
 		user.setPhoneNr(userDTO.getPhoneNr());
 		user.setEnabled(true);
 		saveDao.save(user);
-		
+
 		this.userRoles = new UserRoles();
 		userRoles.setUsers(user);
 		userRoles.setRole("ROLE_USER");
 		saveDao.save(userRoles);
 	}
-	
+
 	public Users getUsers() {
 		return this.user;
 	}

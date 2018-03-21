@@ -24,7 +24,7 @@ public class LoginController {
 	public String login() {
 		return "login";
 	}
-	
+
 	@RequestMapping(value="/logout", method=RequestMethod.GET)  
 	public String logout(HttpServletRequest request, HttpServletResponse response) { 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication(); 
@@ -33,12 +33,12 @@ public class LoginController {
 		}
 		return "redirect:/";  
 	}  
-	 
+
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
-		public String accesssDenied() {
-		  return "403";
+	public String accesssDenied() {
+		return "403";
 	}
-	
+
 	@RequestMapping(value = { "/admin" }, method = RequestMethod.GET)
 	public String admin(Model model) {
 		//check if user is login

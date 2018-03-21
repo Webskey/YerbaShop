@@ -10,12 +10,12 @@ import org.yerbashop.model.Orders;
 @Repository
 public class OrdersDao  {
 
-  @Autowired
-  private SessionFactory sessionFactory;
+	@Autowired
+	private SessionFactory sessionFactory;
 
-  @SuppressWarnings("unchecked")
-  public List<Orders> getAllProducts() {
-	  
-    return sessionFactory.getCurrentSession().createQuery("from Orders").getResultList();
-  }
+	@SuppressWarnings("unchecked")
+	public List<Orders> getAllProducts() {
+
+		return sessionFactory.getCurrentSession().createQuery("from Orders").getResultList();
+	}
 }

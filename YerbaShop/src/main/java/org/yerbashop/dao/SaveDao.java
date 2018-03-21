@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class SaveDao {
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	public void save(Object object)throws ConstraintViolationException {
 		sessionFactory.getCurrentSession().save(object);
 	}

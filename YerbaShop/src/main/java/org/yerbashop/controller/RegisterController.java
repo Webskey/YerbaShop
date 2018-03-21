@@ -19,42 +19,41 @@ import org.yerbashop.service.UserRegisterService;
 
 @Controller
 public class RegisterController {
-	
+
 	@Autowired
 	EmailService emailService;
-	
+
 	@Autowired
 	UserRegisterService userRegisterService;
 
 	ExecutorService executor = Executors.newCachedThreadPool();
-	
-		@RequestMapping(value = "/register", method = RequestMethod.GET)
-		public String register(Model model) {
-			model.addAttribute("user", new UsersDTO());
+
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String register(Model model) {
+		model.addAttribute("user", new UsersDTO());
+		return "register";
+	}
+
+	@RequestMapping(value = "/reg", method = RequestMethod.POST)
+	public String reg(@Validated @ModelAttribute("user") UsersDTO user, BindingResult bindingResult,Model model) {
+
+		if (bindingResult.hasErrors()) {
 			return "register";
+		}else {
+			try {
+				userRegisterService.register(user);
+			}catch(ConstraintViolationException e) {
+				bindingResult.rejectValue("username","userAlreadyExist","User with that username already exists.");
+				return "register";
+			}
+
+			executor.execute(()->{
+				emailService.sendEmail(new WelcomeMessage(user));
+				System.out.println("Mail sent");
+			});
+
+			return "reg";
 		}
-	   
-	   @RequestMapping(value = "/reg", method = RequestMethod.POST)
-	   public String reg(@Validated @ModelAttribute("user") UsersDTO user, BindingResult bindingResult,Model model) {
-		   
-		   if (bindingResult.hasErrors()) {
-	            return "register";
-	        }else {
-	        	try {
-	        		userRegisterService.register(user);
-		        }catch(ConstraintViolationException e) {
-		    	    bindingResult.rejectValue("username","userAlreadyExist","User with that username already exists.");
-		    	    return "register";
-		        }
-		        
-	        	executor.execute(()->{
-	        		emailService.sendEmail(new WelcomeMessage(user));
-	        		System.out.println("Mail sent");
-	        	});
-	        	
-	        	return "reg";
-	        }
-	   }
+	}
 }
 
-	   

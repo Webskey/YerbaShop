@@ -13,7 +13,7 @@ public class ProductsService {
 
 	@Autowired
 	private ProductsDao productsDao;
-	
+
 	@Transactional(readOnly = true)
 	public List<Products> getProductList(){
 		return productsDao.getAllProducts();
