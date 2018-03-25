@@ -8,6 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yerbashop.dao.ProductsDao;
 import org.yerbashop.model.Products;
 
+/**
+ * <h1>ProductsService class.</h1>
+ *
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Service
 public class ProductsService {
 

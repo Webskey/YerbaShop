@@ -9,6 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * <h1>Spring Security configuration class.</h1>
+ *
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @EnableWebSecurity  
 @ComponentScan("org.yerbashop")  
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter { 
@@ -21,8 +28,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService)
 		.passwordEncoder(new BCryptPasswordEncoder());
 	}
-
-
+	
+	/**
+	 *This method sets permissions, adress to login, logout and acces denied pages. 
+	 */
 	@Override  
 	protected void configure(HttpSecurity http) throws Exception {  
 
@@ -30,8 +39,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 		.antMatchers("/order/**").access("hasRole('ROLE_USER')")
 		.antMatchers("/profile/**").access("hasRole('ROLE_USER')")
+		.antMatchers("/remove-from-basket/**").access("hasRole('ROLE_USER')")
+		.antMatchers("/add-to-basket/**").access("hasRole('ROLE_USER')")
 		.antMatchers("/basket/**").access("hasRole('ROLE_USER')")
-		.and().formLogin().loginPage("/login")
+		.and().formLogin().loginPage("/login").defaultSuccessUrl("/profile", true)
 		.and()  
 		.httpBasic()  
 		.and()  

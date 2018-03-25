@@ -10,6 +10,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.yerbashop.model.Users;
 import org.yerbashop.service.UserProfileService;
 
+/**
+ * <h1>User profile information controller class.</h1>
+ * 
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
 
 @Controller
 public class ProfileController {

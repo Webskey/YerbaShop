@@ -5,6 +5,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.yerbashop.mailMessages.MessageCreator; 
 
+/**
+ * <h1>EmailService class.</h1>
+ *
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Service
 public class EmailService{
 

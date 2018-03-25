@@ -12,6 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/**
+ * <h1>Spring security functionality controller class.</h1>
+ * This class covers spring security login, logout and access denied(403) controller. 
+ * 
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Controller
 public class LoginController {
 

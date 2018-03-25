@@ -1,0 +1,6 @@
+org.yerbashop
+org.yerbashop.controller
+org.yerbashop.dao
+org.yerbashop.mailMessages
+org.yerbashop.model
+org.yerbashop.service
