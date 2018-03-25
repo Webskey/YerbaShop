@@ -30,7 +30,7 @@ public class UserDetailsDaoTest {
 	private SessionFactory sessionFactory;
 
 	@InjectMocks
-	protected UserDetailsDa userDetailsDao;
+	protected UserDetailsDao userDetailsDao;
 
 	private static HibernateUtil hibernateUtil= new HibernateUtil();
 
@@ -90,6 +90,7 @@ public class UserDetailsDaoTest {
 	public void shouldReturnROLEADMIN_whenAdminProvided(){
 		Users user = userDetailsDao.findUserByUsername("admin");
 		Set<UserRoles> userRoles = user.getUserRoles();
+		System.out.println(userRoles);
 		String[] userRole = userRoles.stream().map(s->s.getRole()).toArray(String[]::new);
 		assertThat(userRole, arrayContainingInAnyOrder("ROLE_USER","ROLE_ADMIN"));
 	}

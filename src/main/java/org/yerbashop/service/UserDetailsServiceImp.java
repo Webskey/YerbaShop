@@ -7,14 +7,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yerbashop.dao.UserDetailsDa;
+import org.yerbashop.dao.UserDetailsDao;
 import org.yerbashop.model.Users;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImp implements UserDetailsService {
 
 	@Autowired
-	private UserDetailsDa userDetailsDao;
+	private UserDetailsDao userDetailsDao;
 
 	@Transactional(readOnly = true)
 	@Override

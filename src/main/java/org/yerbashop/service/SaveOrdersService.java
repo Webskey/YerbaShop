@@ -16,19 +16,13 @@ public class SaveOrdersService {
 	@Autowired
 	private SaveDao saveDao;
 
-	private Orders order;
-
 	@Transactional
 	public void saveOrders(Users user, Set<Products> productsList) {
 
-		this.order = new Orders();
+		Orders order = new Orders();
 		order.setUsers(user);
 		order.setProductsList(productsList);
 
 		saveDao.save(order);
-	}
-
-	public Orders getOrder(){
-		return order;
 	}
 }

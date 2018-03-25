@@ -1,6 +1,5 @@
 package org.yerbashop.service;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -75,7 +74,7 @@ public class SaveOrdersServiceTest {
 		orders.setProductsList(products);
 
 		saveOrdersService.saveOrders(user, products);
-		assertEquals(orders.getUsers().getFirstname(),saveOrdersService.getOrder().getUsers().getFirstname());
-		verify(saveDao).save(saveOrdersService.getOrder());
+		
+		verify(saveDao).save(orders);
 	}
 }

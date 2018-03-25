@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.yerbashop.model.Users;
 
 @Repository
-public class UserDetailsDa  {
+public class UserDetailsDao  {
 
 	@Autowired
 	private SessionFactory sessionFactory;

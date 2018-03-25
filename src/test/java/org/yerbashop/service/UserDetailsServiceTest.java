@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.yerbashop.dao.UserDetailsDa;
+import org.yerbashop.dao.UserDetailsDao;
 import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
 
@@ -24,7 +24,7 @@ import org.yerbashop.model.Users;
 public class UserDetailsServiceTest {
 
 	@Mock
-	private UserDetailsDa userDetailsDao;
+	private UserDetailsDao userDetailsDao;
 
 	@InjectMocks
 	private UserDetailsServiceImp userDetailsService;
