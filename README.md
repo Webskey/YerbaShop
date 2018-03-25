@@ -17,7 +17,7 @@ Testing Technologies:
 * Spring MVC Test
 * Spring Security Test
 
-## [Documentation](http://www.example.com/)
+## [Documentation](https://webskey.github.io/YerbaShop/)
 
 ## TODO:
 
