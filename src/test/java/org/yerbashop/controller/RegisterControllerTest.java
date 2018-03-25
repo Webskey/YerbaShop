@@ -34,8 +34,6 @@ import org.yerbashop.model.UsersDTO;
 import org.yerbashop.service.EmailService;
 import org.yerbashop.service.UserRegisterService;
 
-
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = AppConfig.class)

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"org.yerbashop.controller"},{"l":"org.yerbashop.dao"},{"l":"org.yerbashop.mailMessages"},{"l":"org.yerbashop.model"},{"l":"org.yerbashop.service"}]

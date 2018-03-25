@@ -27,6 +27,14 @@ import org.yerbashop.service.ProductsService;
 import org.yerbashop.service.SaveOrdersService;
 import org.yerbashop.service.UserProfileService;
 
+/**
+ * <h1>Products and orders controller class.</h1>
+ * This provides products from database and handles taking order from user. 
+ * 
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Controller
 public class ProductsController{
 
@@ -45,7 +53,7 @@ public class ProductsController{
 	ExecutorService executor = Executors.newCachedThreadPool();
 
 	Set<Products> orderList = new HashSet<Products>();
-
+	
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	public ModelAndView products(ModelMap model,HttpServletRequest req, HttpServletResponse resp) {
 		if(req.getParameter("cat") != null)
@@ -67,9 +75,6 @@ public class ProductsController{
 	public String addToBasket(@ModelAttribute("Products")Products product, ModelMap model) {
 		if(!orderList.contains(product))
 			orderList.add(product);
-		else {
-			System.out.println("zawiera!");
-		}
 		model.addAttribute("productAdded", product);
 		return "add-to-basket";
 	}
@@ -87,26 +92,11 @@ public class ProductsController{
 
 		executor.execute(()->{
 			emailService.sendEmail(new OrderToAdmin(user,orderList));
-			System.out.println("Mail sent to admin");
 			emailService.sendEmail(new OrderToUser(user,orderList));
-			System.out.println("Mail sent to user");
 			saveOrdersService.saveOrders(user, orderList);
-			System.out.println("Order saved");
 			orderList.removeAll(orderList);
 		});
 
-
-		/*
-		executor.execute(()->{
-			emailService.sendEmail(new OrderToUser(user,orderList));
-    		System.out.println("Mail sent to user");
-    	});
-
-		executor.execute(()->{
-			saveOrdersService.saveOrders(user, orderList);
-    		System.out.println("Order saved");
-    	});
-		 */
 		return "order";
 	}
 }

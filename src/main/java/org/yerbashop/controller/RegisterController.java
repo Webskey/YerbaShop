@@ -17,6 +17,13 @@ import org.yerbashop.model.UsersDTO;
 import org.yerbashop.service.EmailService;
 import org.yerbashop.service.UserRegisterService;
 
+/**
+ * <h1>Register new user controller class.</h1>
+ * 
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Controller
 public class RegisterController {
 
@@ -33,7 +40,9 @@ public class RegisterController {
 		model.addAttribute("user", new UsersDTO());
 		return "register";
 	}
-
+	/**
+	 * This POST method validates user details, if they meet requirements, saves new user into database and sends him a welcome email.
+	 */
 	@RequestMapping(value = "/reg", method = RequestMethod.POST)
 	public String reg(@Validated @ModelAttribute("user") UsersDTO user, BindingResult bindingResult,Model model) {
 

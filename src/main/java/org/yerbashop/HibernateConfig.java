@@ -9,6 +9,14 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * <h1>Hibernate configuration class.</h1>
+ * Sets database connection. 
+ *
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfig {

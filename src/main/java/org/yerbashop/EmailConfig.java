@@ -7,12 +7,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+/**
+ * <h1>Email configuration class.</h1>
+ * Sets properties of JavaMailSender.
+ *
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 @Configuration
 public class EmailConfig {
 
 	@Autowired
 	Credentials credentials;
-
+	/**
+	 * @return JavaMailSenderImpl set to connect gmail account.
+	 */
 	@Bean
 	public JavaMailSenderImpl getMailSender(){
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

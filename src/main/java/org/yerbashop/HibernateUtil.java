@@ -15,6 +15,14 @@ import org.yerbashop.model.Products;
 import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
 
+/**
+ * <h1>Hibernate configuration class for tests.</h1>
+ * Sets database connection for testing.
+ *
+ * @author  <a href="https://github.com/Webskey">Webskey</a>
+ * @since   2018-03-25
+ */
+
 public class HibernateUtil {
 
 	Credentials credentials = new Credentials();
