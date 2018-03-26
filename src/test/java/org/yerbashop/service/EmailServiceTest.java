@@ -105,8 +105,8 @@ public class EmailServiceTest {
 		Message[] messages = testSmtp.getReceivedMessages();
 		assertEquals(1, messages.length);
 		assertEquals(welcomeMessage.getMessage().getSubject(), messages[0].getSubject());
-		String body = GreenMailUtil.getBody(messages[0]);
-		assertEquals(welcomeMessage.getMessage().getText(), body);
+		String body = GreenMailUtil.getBody(messages[0]).replaceAll("[\\r\\n]+", "");
+		assertEquals(welcomeMessage.getMessage().getText().replaceAll("[\\r\\n]+", ""), body);
 		assertEquals(userDTO.getEmail(), messages[0].getAllRecipients()[0].toString());
 	}
 

@@ -21,6 +21,7 @@ Testing Technologies:
 
 ## TODO:
 
+* Admin Panel to manage orders
 * Complete documentation
 * Better tests names (given,when,then)
 * Front end

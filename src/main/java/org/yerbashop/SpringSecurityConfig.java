@@ -42,7 +42,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/remove-from-basket/**").access("hasRole('ROLE_USER')")
 		.antMatchers("/add-to-basket/**").access("hasRole('ROLE_USER')")
 		.antMatchers("/basket/**").access("hasRole('ROLE_USER')")
-		.and().formLogin().loginPage("/login").defaultSuccessUrl("/profile", true)
+		.and().formLogin().loginPage("/login").defaultSuccessUrl("/403", true)
 		.and()  
 		.httpBasic()  
 		.and()  

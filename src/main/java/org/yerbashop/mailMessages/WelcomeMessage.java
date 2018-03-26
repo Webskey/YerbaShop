@@ -5,19 +5,23 @@ import org.yerbashop.model.UsersDTO;
 
 public class WelcomeMessage implements MessageCreator {
 
-	SimpleMailMessage message;
+	private SimpleMailMessage message;
 
 	public WelcomeMessage(UsersDTO user) {
 
 		message = new SimpleMailMessage(); 
 		message.setTo(user.getEmail()); 
 		message.setSubject("Welcome in YerbaShop.org"); 
-		message.setText("Hello, "+user.getFirstname()+" Your login details: Login: "+user.getUsername()+" Password: "+user.getPassword()+"YerbaShop.org cheers mate, yerba mate");
+		message.setText("Hello, "+user.getFirstname()+","
+		+ "\n\nThank you for registering in our store."
+		+ "\n\nYour login details:"
+		+ "\nLogin: "+user.getUsername()
+		+ "\nPassword: "+user.getPassword()
+		+ "\n\n\tYerbaShop.org! cheers mate - yerba mate");
 	}
 
 	@Override
 	public SimpleMailMessage getMessage() {
 		return message;
 	}
-
 }
