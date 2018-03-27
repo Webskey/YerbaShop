@@ -31,17 +31,14 @@
 
 #buttonImg {
 	width: 70px;
+	float: right;
+	margin-right: 3%;
+	margin-bottom: 3%;
 }
 
 #price {
 	margin-right: 5%;
 	text-align: right;
-}
-
-#button {
-	float: right;
-	margin-right: 3%;
-	margin-bottom: 3%;
 }
 </style>
 </head>
@@ -55,11 +52,9 @@
 			<p id="desc">${product.description}</p>
 			<p id="price">${product.price}.00$</p>
 			<form:form method="POST" action="add-to-basket">
-				<button id="button" name="submit" value="submit" type="submit">
-					<IMG id="buttonImg"
-						src="http://www.free-icons-download.net/images/add-to-basket-icon-32057.png"
-						alt="wow">
-				</button>
+				<input type="image" id="buttonImg"
+					src="http://www.free-icons-download.net/images/add-to-basket-icon-32057.png"
+					alt="Submit Form" />
 				<form:hidden path="name" value="${product.name}" />
 				<form:hidden path="price" value="${product.price}" />
 				<form:hidden path="image" value="${product.image}" />

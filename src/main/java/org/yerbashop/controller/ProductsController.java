@@ -53,7 +53,7 @@ public class ProductsController{
 	ExecutorService executor = Executors.newCachedThreadPool();
 
 	Set<Products> orderList = new HashSet<Products>();
-	
+
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	public ModelAndView products(ModelMap model,HttpServletRequest req, HttpServletResponse resp) {
 		if(req.getParameter("cat") != null)
@@ -85,9 +85,8 @@ public class ProductsController{
 		return "redirect:basket";
 	}
 
-	@RequestMapping(value = "/order", method = RequestMethod.GET)
+	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public String order(ModelMap model, Principal principal) {
-
 		Users user = userProfileService.getUser(principal.getName());
 
 		executor.execute(()->{
