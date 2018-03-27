@@ -3,18 +3,19 @@ package org.yerbashop.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class UsersDTO {
 
 	@NotEmpty(message="Username is required")
-	@Length(min=4,max=15, message= "username 4-15 digits")
+	@Length(min=4,max=15, message= "Your username has to contain 4-15 characters")
 	private String username;
 
 	@NotEmpty(message="Password is required")
-	@Length(min=5,max=10, message = "password 5-10 digits")
+	@Length(min=5,max=10, message = "Your password has to contain 5-10 characters")
 	private String password;
 
 	private boolean enabled;
@@ -28,7 +29,7 @@ public class UsersDTO {
 	private String adress;
 
 	@NotEmpty(message="Email is required")
-	@Email(message = "not email regex")
+	@Pattern(regexp=".+@.+\\..+", message="Wrong email!")
 	private String email;
 
 	private Set<UserRoles> userRoles = new HashSet<>();

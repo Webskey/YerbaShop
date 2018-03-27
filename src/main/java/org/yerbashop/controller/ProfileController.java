@@ -1,6 +1,7 @@
 package org.yerbashop.controller;
 
 import java.security.Principal;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class ProfileController {
 		model.addObject("email", user.getEmail());
 		model.addObject("adress", user.getAdress());
 		model.addObject("phoneNr", user.getPhoneNr());
-		model.addObject("orderList", user.getOrders());
+		model.addObject("orderList", user.getOrders().stream().sorted((a, b) -> Integer.compare(a.getId(), b.getId())).collect(Collectors.toList()));
 
 		model.setViewName("profile");
 

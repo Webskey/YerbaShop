@@ -5,17 +5,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Lulz</title>
+<style>
+h2 {
+	text-align: center;
+	margin: auto;
+	padding: 10px;
+}
+</style>
 </head>
 <body>
-	<a href="index "> Logout</a> ${username}
-	<button onclick="goBack()">Go Back 2 Pages</button>
-
-
+	<h2>Sorry, you do not have access to this page.</h2>
+	<button onclick="goBack()">Go Back</button>
 </body>
 <script>
-function goBack() {
-    window.history.go(-2);
-}
+	function goBack() {
+		window.history.go(-1);
+	}
 </script>
 </html>

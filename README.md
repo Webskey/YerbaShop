@@ -27,3 +27,4 @@ Testing Technologies:
 * Front end
 * Remember me
 * Log4j
+* Update/Change User profile details
