@@ -10,16 +10,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class UsersDTO {
 
-	@NotEmpty(message="Username is required")
-	@Length(min=4,max=15, message= "Your username has to contain 4-15 characters")
+	@NotEmpty(message="Username is required.")
+	@Length(min=4,max=15, message= "Your username has to contain 4-15 characters.")
 	private String username;
 
-	@NotEmpty(message="Password is required")
-	@Length(min=5,max=10, message = "Your password has to contain 5-10 characters")
+	@NotEmpty(message="Password is required.")
+	@Length(min=5,max=10, message = "Your password has to contain 5-10 characters.")
 	private String password;
 
 	private boolean enabled;
-
+	@Pattern(regexp="[0-9]{9}", message="Wrong phone number format.")
 	private String phoneNr;
 
 	private String firstname;
@@ -28,8 +28,8 @@ public class UsersDTO {
 
 	private String adress;
 
-	@NotEmpty(message="Email is required")
-	@Pattern(regexp=".+@.+\\..+", message="Wrong email!")
+	@NotEmpty(message="Email is required.")
+	@Pattern(regexp=".+@.+\\..+", message="Wrong email fromat.")
 	private String email;
 
 	private Set<UserRoles> userRoles = new HashSet<>();

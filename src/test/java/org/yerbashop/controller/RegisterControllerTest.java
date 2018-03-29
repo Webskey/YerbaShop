@@ -75,7 +75,7 @@ public class RegisterControllerTest {
 		user.setFirstname("firstname");
 		user.setLastname("lastname");
 		user.setEmail("jolo_92@wp.pl");
-		user.setPhoneNr("phoneNr");
+		user.setPhoneNr("123789456");
 		return user;
 	}
 

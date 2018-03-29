@@ -102,8 +102,13 @@ h1, h5 {
 							rows="5" cols="30" /></td>
 				</tr>
 				<tr>
-					<td><form:label path="phoneNr">Phone Number</form:label></td>
-					<td class="field"><form:input class="inpu" path="phoneNr" /></td>
+					<spring:bind path="phoneNr">
+						<td><form:label path="phoneNr">Phone Number</form:label></td>
+						<td class="field"><form:input
+								class="form-group ${status.error ? 'inputErr' : 'inpu'}"
+								path="phoneNr" /></td>
+						<td class="valinfo">9 numbers only e.g. 123456789</td>
+					</spring:bind>
 				</tr>
 				<tr>
 					<td class="field" colspan=2><input type="submit"
