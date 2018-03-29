@@ -36,6 +36,7 @@ import org.yerbashop.service.UserProfileService;
  */
 
 @Controller
+@SuppressWarnings("unchecked")
 public class ProductsController{
 
 	@Autowired
@@ -52,7 +53,7 @@ public class ProductsController{
 
 	ExecutorService executor = Executors.newCachedThreadPool();
 
-	Set<Products> orderList = new HashSet<Products>();
+	Set<Products> orderList;
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	public ModelAndView products(ModelMap model,HttpServletRequest req, HttpServletResponse resp) {
@@ -65,16 +66,26 @@ public class ProductsController{
 	}
 
 	@RequestMapping(value = "/basket", method = RequestMethod.GET)
-	public ModelAndView basket(Model model) {
-		model.addAttribute("orderList",orderList);
-		model.addAttribute("priceSum",orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
+	public ModelAndView basket(Model model, HttpServletRequest req) {
+		try {
+			model.addAttribute("orderList",orderList);
+			model.addAttribute("priceSum",orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
+		}catch(NullPointerException ex) {
+			req.getSession().setAttribute("basket", new HashSet<Products>());
+			orderList = (HashSet<Products>) req.getSession().getAttribute("basket");
+		}
 		return new ModelAndView("basket", "command", new Products());
 	}
 
 	@RequestMapping(value = "/add-to-basket", method = RequestMethod.POST)
-	public String addToBasket(@ModelAttribute("Products")Products product, ModelMap model) {
-		if(!orderList.contains(product))
-			orderList.add(product);
+	public String addToBasket(@ModelAttribute("Products")Products product, ModelMap model, HttpServletRequest req) {
+		try {
+			if(!orderList.contains(product))
+				orderList.add(product);
+		}catch(NullPointerException ex) {
+			req.getSession().setAttribute("basket", new HashSet<Products>());
+			orderList = (Set<Products>) req.getSession().getAttribute("basket");
+		}
 		model.addAttribute("productAdded", product);
 		return "add-to-basket";
 	}
