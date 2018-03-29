@@ -165,7 +165,7 @@ public class ProductsControllerTest {
 	@Test
 	public void shouldAddProductToBasket_whenAddToBasketPostMethodCalled() throws Exception{
 
-		this.mockMvc.perform(post("/add-to-basket").flashAttr("Products", products.get(0)))
+		this.mockMvc.perform(post("/add-to-basket").flashAttr("Products", products.get(0)).flashAttr("orderList", orderList))
 		.andExpect(status().isOk())
 		.andExpect(view().name("add-to-basket"))
 		.andExpect(model().attribute("productAdded",products.get(0)))
@@ -179,7 +179,7 @@ public class ProductsControllerTest {
 	public void shouldRemoveProductFromBasket_whenRemoveFromBasketPostMethodCalled() throws Exception{
 		orderList.addAll(productsList());
 
-		this.mockMvc.perform(post("/remove-from-basket").flashAttr("Products", products.get(0)))
+		this.mockMvc.perform(post("/remove-from-basket").flashAttr("Products", products.get(0)).flashAttr("orderList", orderList))
 		.andExpect(redirectedUrl("basket"))
 		.andExpect(view().name("redirect:basket"));
 
@@ -191,7 +191,7 @@ public class ProductsControllerTest {
 	public void shouldReturnOrderListAsModelAttr_whenBasketMethodCalled() throws Exception{
 		orderList.addAll(productsList());
 
-		this.mockMvc.perform(get("/basket"))
+		this.mockMvc.perform(get("/basket").flashAttr("orderList", orderList))
 		.andExpect(status().isOk())
 		.andExpect(view().name("basket"))
 		.andExpect(model().attribute("orderList", hasSize(3)))
@@ -213,6 +213,7 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldMakeOrderThings_whenOrdercalled() throws Exception {
+		orderList.addAll(productsList());
 		doAnswer( invocation-> {
 			((Runnable) invocation.getArguments()[0]).run();
 			return null;
@@ -221,7 +222,7 @@ public class ProductsControllerTest {
 		doNothing().when(emailService).sendEmail(any());
 		doNothing().when(saveOrdersService).saveOrders(any(), any());
 
-		this.mockMvc.perform(get("/order").principal(principal))
+		this.mockMvc.perform(post("/order").principal(principal).flashAttr("orderList", orderList))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
 		.andExpect(view().name("order"))
@@ -230,5 +231,6 @@ public class ProductsControllerTest {
 		verify(emailService, times(2)).sendEmail(any());
 		verify(saveOrdersService, times(1)).saveOrders(any(), any());
 		verify(userProfileService,times(1)).getUser("username");
+		assertEquals(orderList.size(),0);
 	}
 } 

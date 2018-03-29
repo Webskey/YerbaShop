@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.yerbashop.mailMessages.OrderToAdmin;
 import org.yerbashop.mailMessages.OrderToUser;
@@ -36,6 +37,7 @@ import org.yerbashop.service.UserProfileService;
  */
 
 @Controller
+@SessionAttributes("orderList")
 public class ProductsController{
 
 	@Autowired
@@ -52,7 +54,11 @@ public class ProductsController{
 
 	ExecutorService executor = Executors.newCachedThreadPool();
 
-	Set<Products> orderList = new HashSet<Products>();
+	@ModelAttribute("orderList")
+	private Set<Products> orderList(){
+		Set<Products> orderList = new HashSet<Products>();
+		return orderList;
+	}
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	public ModelAndView products(ModelMap model,HttpServletRequest req, HttpServletResponse resp) {
@@ -65,14 +71,14 @@ public class ProductsController{
 	}
 
 	@RequestMapping(value = "/basket", method = RequestMethod.GET)
-	public ModelAndView basket(Model model) {
+	public ModelAndView basket(@ModelAttribute("orderList") HashSet<Products> orderList, Model model, HttpServletRequest req) {
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("priceSum",orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
 		return new ModelAndView("basket", "command", new Products());
 	}
 
 	@RequestMapping(value = "/add-to-basket", method = RequestMethod.POST)
-	public String addToBasket(@ModelAttribute("Products")Products product, ModelMap model) {
+	public String addToBasket(@ModelAttribute("orderList") HashSet<Products> orderList, @ModelAttribute("Products")Products product, ModelMap model, HttpServletRequest req) {
 		if(!orderList.contains(product))
 			orderList.add(product);
 		model.addAttribute("productAdded", product);
@@ -80,13 +86,13 @@ public class ProductsController{
 	}
 
 	@RequestMapping(value = "/remove-from-basket", method = RequestMethod.POST)
-	public String removeFromBasket(@ModelAttribute("Products")Products product) {
+	public String removeFromBasket(@ModelAttribute("orderList") HashSet<Products> orderList, @ModelAttribute("Products")Products product) {
 		orderList.remove(orderList.stream().filter(s->s.getName().equals(product.getName())).findAny().get());
 		return "redirect:basket";
 	}
 
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
-	public String order(ModelMap model, Principal principal) {
+	public String order(@ModelAttribute("orderList") HashSet<Products> orderList, ModelMap model, Principal principal) {
 		Users user = userProfileService.getUser(principal.getName());
 
 		executor.execute(()->{
