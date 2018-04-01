@@ -37,11 +37,8 @@ import org.yerbashop.service.UserProfileService;
  */
 
 @Controller
-<<<<<<< HEAD
 @SessionAttributes("orderList")
-=======
-@SuppressWarnings("unchecked")
->>>>>>> branch 'PC' of https://github.com/Webskey/YerbaShop
+
 public class ProductsController{
 
 	@Autowired
@@ -58,15 +55,13 @@ public class ProductsController{
 
 	ExecutorService executor = Executors.newCachedThreadPool();
 
-<<<<<<< HEAD
+
 	@ModelAttribute("orderList")
 	private Set<Products> orderList(){
 		Set<Products> orderList = new HashSet<Products>();
 		return orderList;
 	}
-=======
-	Set<Products> orderList;
->>>>>>> branch 'PC' of https://github.com/Webskey/YerbaShop
+
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	public ModelAndView products(ModelMap model,HttpServletRequest req, HttpServletResponse resp) {
@@ -79,37 +74,19 @@ public class ProductsController{
 	}
 
 	@RequestMapping(value = "/basket", method = RequestMethod.GET)
-<<<<<<< HEAD
+
 	public ModelAndView basket(@ModelAttribute("orderList") HashSet<Products> orderList, Model model, HttpServletRequest req) {
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("priceSum",orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
-=======
-	public ModelAndView basket(Model model, HttpServletRequest req) {
-		try {
-			model.addAttribute("orderList",orderList);
-			model.addAttribute("priceSum",orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
-		}catch(NullPointerException ex) {
-			req.getSession().setAttribute("basket", new HashSet<Products>());
-			orderList = (HashSet<Products>) req.getSession().getAttribute("basket");
-		}
->>>>>>> branch 'PC' of https://github.com/Webskey/YerbaShop
+
 		return new ModelAndView("basket", "command", new Products());
 	}
 
 	@RequestMapping(value = "/add-to-basket", method = RequestMethod.POST)
-<<<<<<< HEAD
+
 	public String addToBasket(@ModelAttribute("orderList") HashSet<Products> orderList, @ModelAttribute("Products")Products product, ModelMap model, HttpServletRequest req) {
 		if(!orderList.contains(product))
 			orderList.add(product);
-=======
-	public String addToBasket(@ModelAttribute("Products")Products product, ModelMap model, HttpServletRequest req) {
-		try {
-			if(!orderList.contains(product))
-				orderList.add(product);
-		}catch(NullPointerException ex) {
-			req.getSession().setAttribute("basket", new HashSet<Products>());
-			orderList = (Set<Products>) req.getSession().getAttribute("basket");
-		}
 
 		model.addAttribute("productAdded", product);
 		return "add-to-basket";
