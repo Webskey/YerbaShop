@@ -110,7 +110,7 @@ public class ProductsController{
 			req.getSession().setAttribute("basket", new HashSet<Products>());
 			orderList = (Set<Products>) req.getSession().getAttribute("basket");
 		}
->>>>>>> branch 'PC' of https://github.com/Webskey/YerbaShop
+
 		model.addAttribute("productAdded", product);
 		return "add-to-basket";
 	}
