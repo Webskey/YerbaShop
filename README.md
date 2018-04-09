@@ -23,6 +23,7 @@
 #### Tools:
 * Maven 4
 * Apache Tomcat 9
+* Eclipse Oxygen.3
 
 #### Testing Technologies:
 * JUnit 4
@@ -39,4 +40,4 @@
 * Better test methods names + (given,when,then)
 * Add remember-me feature
 * Logs with log4j
-* Update/Change user profile details(firstname, adress etc.)
+* Add Update/Change user profile details(firstname, adress etc.) feature
