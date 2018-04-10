@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
+import org.yerbashop.dummybuilders.UsersBuilder;
 import org.yerbashop.model.Orders;
 import org.yerbashop.model.Users;
 import org.yerbashop.service.UserProfileService;
@@ -65,13 +66,9 @@ public class ProfileControllerTest {
 	}
 
 	private Users userTest() {
-		Users user = new Users();
-		user.setUsername("username");
-		user.setFirstname("firstname");
-		user.setLastname("lastname");
-		user.setEmail("email");
-		user.setPhoneNr("phoneNr");
-
+		UsersBuilder usersBuilder = new UsersBuilder();
+		Users user = usersBuilder.getUser();
+		
 		Orders order = new Orders();
 		order.setId(12);
 		order.setUsers(user);
@@ -102,7 +99,7 @@ public class ProfileControllerTest {
 		.andExpect(model().attribute("username", "username"))
 		.andExpect(model().attribute("firstname", "firstname"))
 		.andExpect(model().attribute("lastname", "lastname"))
-		.andExpect(model().attribute("email", "email"))
+		.andExpect(model().attribute("email", "email@email.com"))
 		.andExpect(model().attribute("phoneNr", "phoneNr"))
 		.andExpect(model().attribute("orderList", hasItem(instanceOf(Orders.class))))
 		.andExpect(view().name("profile"));

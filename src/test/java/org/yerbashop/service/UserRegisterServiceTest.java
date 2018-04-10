@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dao.SaveDao;
+import org.yerbashop.dummybuilders.UsersDTOBuilder;
 import org.yerbashop.model.UsersDTO;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,14 +32,8 @@ public class UserRegisterServiceTest {
 
 	@Before
 	public void setUp() {
-		userDTO = new UsersDTO();
-		userDTO.setUsername("username");
-		userDTO.setPassword("password");
-		userDTO.setFirstname("firstname");
-		userDTO.setLastname("lastname");
-		userDTO.setEmail("email@email.com");
-		userDTO.setAdress("adress");
-		userDTO.setPhoneNr("phoneNr");
+		UsersDTOBuilder usersDTOBuilder = new UsersDTOBuilder();
+		userDTO = usersDTOBuilder.getUsers();
 	}
 
 	@Test

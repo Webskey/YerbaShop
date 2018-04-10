@@ -22,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.yerbashop.Credentials;
 import org.yerbashop.EmailConfig;
+import org.yerbashop.dummybuilders.UsersDTOBuilder;
 import org.yerbashop.mailMessages.OrderToAdmin;
 import org.yerbashop.mailMessages.OrderToUser;
 import org.yerbashop.mailMessages.WelcomeMessage;
@@ -57,13 +58,8 @@ public class EmailServiceTest {
 		mailSender.setPort(3025);
 		mailSender.setHost("localhost");
 
-		userDTO = new UsersDTO();
-		userDTO.setUsername("username");
-		userDTO.setPassword("password");
-		userDTO.setFirstname("firstname");
-		userDTO.setLastname("lastname");
-		userDTO.setEmail("email@email.com");
-		userDTO.setPhoneNr("phoneNr");
+		UsersDTOBuilder usersDTOBuilder = new UsersDTOBuilder();
+		userDTO = usersDTOBuilder.getUsers();		
 	}
 
 	@After
@@ -163,5 +159,4 @@ public class EmailServiceTest {
 		userDTO.setEmail(null);
 		emailService.sendEmail(new WelcomeMessage(userDTO));
 	}
-
 }

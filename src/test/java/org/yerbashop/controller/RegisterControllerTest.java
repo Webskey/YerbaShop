@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
+import org.yerbashop.dummybuilders.UsersDTOBuilder;
 import org.yerbashop.model.UsersDTO;
 import org.yerbashop.service.EmailService;
 import org.yerbashop.service.UserRegisterService;
@@ -66,17 +67,9 @@ public class RegisterControllerTest {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(registerController)
 				.setViewResolvers(viewResolver)
 				.build();
-		user = new UsersDTO();
-	}
-
-	private UsersDTO userTest() {
-		user.setUsername("usernames");
-		user.setPassword("password");
-		user.setFirstname("firstname");
-		user.setLastname("lastname");
-		user.setEmail("jolo_92@wp.pl");
-		user.setPhoneNr("123789456");
-		return user;
+		
+		UsersDTOBuilder usersDTOBuilder = new UsersDTOBuilder();
+		user = usersDTOBuilder.getUsers();
 	}
 
 	@Test
@@ -92,7 +85,7 @@ public class RegisterControllerTest {
 	@Test
 	public void shouldFailValidation_whenUsernameWrong() throws Exception{
 
-		this.mockMvc.perform(post("/reg").param("username","F").flashAttr("user", userTest()))
+		this.mockMvc.perform(post("/reg").param("username","F").flashAttr("user", user))
 		//.andDo(MockMvcResultHandlers.print())
 		.andExpect(model().attributeHasFieldErrors("user", "username"))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
@@ -103,10 +96,10 @@ public class RegisterControllerTest {
 	@Test
 	public void shouldFailValidation_whenPasswordeWrong() throws Exception{
 
-		this.mockMvc.perform(post("/reg").param("password","F").flashAttr("user", userTest()))
+		this.mockMvc.perform(post("/reg").param("password","F").flashAttr("user", user))
 		//.andDo(MockMvcResultHandlers.print())
 		.andExpect(model().attributeHasFieldErrors("user", "password"))
-		.andExpect(model().attribute("user", hasProperty("username", is("usernames"))))
+		.andExpect(model().attribute("user", hasProperty("username", is("username"))))
 		.andExpect(view().name("register"))
 		.andExpect(status().isOk());
 	}
@@ -114,7 +107,7 @@ public class RegisterControllerTest {
 	@Test
 	public void shouldFailValidation_whenEmailWrong() throws Exception{
 
-		this.mockMvc.perform(post("/reg").param("email","F").flashAttr("user", userTest()))
+		this.mockMvc.perform(post("/reg").param("email","F").flashAttr("user", user))
 		//.andDo(MockMvcResultHandlers.print())
 		.andExpect(model().attributeHasFieldErrors("user", "email"))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
@@ -132,21 +125,21 @@ public class RegisterControllerTest {
 		doNothing().when(emailService).sendEmail(any());
 		doNothing().when(userRegisterService).register(any());
 
-		this.mockMvc.perform(post("/reg").flashAttr("user", userTest()))
+		this.mockMvc.perform(post("/reg").flashAttr("user", user))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
 		.andExpect(model().attributeHasNoErrors("user"))
 		.andExpect(view().name("reg"))
 		.andExpect(status().isOk());
 
 		verify(emailService, times(1)).sendEmail(any());
-		verify(userRegisterService, times(1)).register(userTest());
+		verify(userRegisterService, times(1)).register(user);
 	}
 
 	@Test
 	public void shouldThrowUnsupportedOperationException_whenUserAlreadyExists()throws Exception{
 		doThrow(org.hibernate.exception.ConstraintViolationException.class).when(userRegisterService).register(any());
 
-		this.mockMvc.perform(post("/reg").flashAttr("user", userTest()))
+		this.mockMvc.perform(post("/reg").flashAttr("user", user))
 		//.andDo(MockMvcResultHandlers.print())
 		.andExpect(model().attributeHasFieldErrors("user", "username"))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))

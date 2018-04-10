@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.yerbashop.dao.UserDetailsDao;
+import org.yerbashop.dummybuilders.UsersBuilder;
 import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
 
@@ -33,14 +34,8 @@ public class UserDetailsServiceTest {
 
 	@Before
 	public void setUp() {
-		user = new Users();
-		user.setUsername("username");
-		user.setPassword("password");
-		user.setFirstname("firstname");
-		user.setLastname("lastname");
-		user.setEmail("email@email.com");
-		user.setPhoneNr("phoneNr");
-		user.setEnabled(true);
+		UsersBuilder usersBuilder = new UsersBuilder();
+		user = usersBuilder.getUser();
 
 		UserRoles userRols = new UserRoles();
 		userRols.setUsers(user);
