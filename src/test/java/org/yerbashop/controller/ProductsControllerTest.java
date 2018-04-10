@@ -5,9 +5,6 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,11 +38,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
 import org.yerbashop.model.Products;
-import org.yerbashop.model.Users;
-import org.yerbashop.service.EmailService;
 import org.yerbashop.service.ProductsService;
-import org.yerbashop.service.SaveOrdersService;
-import org.yerbashop.service.UserProfileService;
+import org.yerbashop.service.TakeOrderService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -56,25 +49,16 @@ public class ProductsControllerTest {
 	private MockMvc mockMvc;
 
 	@Mock
-	private ExecutorService executor;
-
-	@Mock
 	private ProductsService productsService;
-
-	@Mock
-	private EmailService emailService;
-
-	@Mock
-	SaveOrdersService saveOrdersService;
 
 	@Mock
 	private Principal principal;
 
+	@Mock
+	private TakeOrderService takeOrderService;
+
 	@Spy
 	private Set<Products> orderList = new HashSet<Products>();
-
-	@Mock
-	private UserProfileService userProfileService;
 
 	@InjectMocks
 	private ProductsController productsController;
@@ -89,7 +73,6 @@ public class ProductsControllerTest {
 		products = productsList();
 		when(productsService.getProductList()).thenReturn(products);
 		when(principal.getName()).thenReturn("username");
-		when(userProfileService.getUser("username")).thenReturn(new Users());
 
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/jsp/view/");
@@ -214,13 +197,6 @@ public class ProductsControllerTest {
 	@Test
 	public void shouldMakeOrderThings_whenOrdercalled() throws Exception {
 		orderList.addAll(productsList());
-		doAnswer( invocation-> {
-			((Runnable) invocation.getArguments()[0]).run();
-			return null;
-		}).when(executor).execute(any(Runnable.class));
-
-		doNothing().when(emailService).sendEmail(any());
-		doNothing().when(saveOrdersService).saveOrders(any(), any());
 
 		this.mockMvc.perform(post("/order").principal(principal).flashAttr("orderList", orderList))
 		.andDo(MockMvcResultHandlers.print())
@@ -228,9 +204,7 @@ public class ProductsControllerTest {
 		.andExpect(view().name("order"))
 		.andExpect(forwardedUrl("/WEB-INF/jsp/view/order.jsp"));
 
-		verify(emailService, times(2)).sendEmail(any());
-		verify(saveOrdersService, times(1)).saveOrders(any(), any());
-		verify(userProfileService,times(1)).getUser("username");
+		verify(takeOrderService).setOrder("username", orderList);
 		assertEquals(orderList.size(),0);
 	}
 } 

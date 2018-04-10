@@ -40,7 +40,7 @@
 * Better test methods names + (given,when,then)
 * Add remember-me feature
 * Logs with log4j
-* Update/Change user profile details(firstname, adress etc.)
+* Add Update/Change user profile details(firstname, adress etc.) feature
 
 ### Index page
 <img src="https://i.imgur.com/9NMIbP0.jpg" alt="Index page" height="200" width="300">
@@ -55,4 +55,5 @@
 <img src="https://i.imgur.com/twSiSqD.jpg" alt="Products page" height="200" width="300">
 
 ### Basket page
+
 <img src="https://i.imgur.com/x0PQBaa.jpg" alt="Basket page" height="200" width="300">
