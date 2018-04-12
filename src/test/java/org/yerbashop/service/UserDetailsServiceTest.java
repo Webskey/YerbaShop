@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.yerbashop.dao.UserDetailsDao;
+import org.yerbashop.dao.LoadByIdDao;
 import org.yerbashop.dummybuilders.UsersBuilder;
 import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
@@ -25,10 +25,10 @@ import org.yerbashop.model.Users;
 public class UserDetailsServiceTest {
 
 	@Mock
-	private UserDetailsDao userDetailsDao;
+	private LoadByIdDao<Users> userDetailsDao;
 
 	@InjectMocks
-	private UserDetailsServiceImp userDetailsService;
+	private UserLoginService userDetailsService;
 
 	private Users user;
 
@@ -48,7 +48,7 @@ public class UserDetailsServiceTest {
 	@Test
 	public void shouldMatchUsersDetailsExceptPassword_whenAllDataProvidedCorrectly()throws Exception{
 
-		when(userDetailsDao.findUserByUsername("username")).thenReturn(user);
+		when(userDetailsDao.findUserById("username")).thenReturn(user);
 
 		UserDetails userDetails = userDetailsService.loadUserByUsername("username");
 
@@ -61,7 +61,7 @@ public class UserDetailsServiceTest {
 	@Test(expected=UsernameNotFoundException.class)
 	public void shouldThrowException_whenUserIsNull()throws Exception{
 
-		when(userDetailsDao.findUserByUsername(any())).thenReturn(null);
+		when(userDetailsDao.findUserById(any())).thenReturn(null);
 
 		UserDetails userDetails = userDetailsService.loadUserByUsername("username");
 

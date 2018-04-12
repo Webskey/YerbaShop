@@ -1,18 +1,30 @@
 package org.yerbashop.dao;
 
+import java.io.Serializable;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.yerbashop.model.Users;
 
 @Repository
-public class UserDetailsDao  {
+public class LoadByIdDao<T>{
+
+	private String clazz;
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public Users findUserByUsername(String username) {
+	public void setClazz(String clazz) {
+		this.clazz = clazz;
+	}
 
-		return sessionFactory.getCurrentSession().get(Users.class, username);
+	@SuppressWarnings("unchecked")
+	public T findUserById(Serializable id) {
+		try {
+			return (T) sessionFactory.getCurrentSession().load(Class.forName(clazz), id);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

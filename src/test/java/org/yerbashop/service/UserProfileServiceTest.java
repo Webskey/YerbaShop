@@ -10,14 +10,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.yerbashop.dao.UserDetailsDao;
+import org.yerbashop.dao.LoadByIdDao;
 import org.yerbashop.model.Users;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserProfileServiceTest {
 
 	@Mock
-	private UserDetailsDao userDetailsDao;
+	private LoadByIdDao<Users> userDetailsDao;
 
 	@InjectMocks
 	private UserProfileService userProfileService;
@@ -28,7 +28,7 @@ public class UserProfileServiceTest {
 	public void setUp() {
 		user = new Users();
 		user.setUsername("TestUsername");
-		when(userDetailsDao.findUserByUsername("TestUsername")).thenReturn(user);
+		when(userDetailsDao.findUserById("TestUsername")).thenReturn(user);
 	}
 
 	@Test

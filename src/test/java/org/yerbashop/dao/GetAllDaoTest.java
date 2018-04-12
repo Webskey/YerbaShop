@@ -19,13 +19,13 @@ import org.yerbashop.HibernateUtil;
 import org.yerbashop.model.Products;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductsDaoTest {
+public class GetAllDaoTest {
 
 	@Mock
 	private SessionFactory sessionFactory;
 
 	@InjectMocks
-	protected ProductsDao productsDao;
+	protected GetAllDao<Products> productsDao;
 
 	private static HibernateUtil hibernateUtil= new HibernateUtil();
 
@@ -41,7 +41,7 @@ public class ProductsDaoTest {
 	@Before
 	public void setUp() {
 		when(sessionFactory.getCurrentSession()).thenReturn(session);
-		products = productsDao.getAllProducts();
+		products = productsDao.getAll();
 	}
 
 	@AfterClass

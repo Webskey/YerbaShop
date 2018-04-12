@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.yerbashop.dao.ProductsDao;
+import org.yerbashop.dao.GetAllDao;
 import org.yerbashop.dummybuilders.ProductsBuilder;
 import org.yerbashop.model.Products;
 
@@ -20,7 +20,7 @@ import org.yerbashop.model.Products;
 public class ProductsServiceTest {
 
 	@Mock
-	private ProductsDao productsDao;
+	private GetAllDao<Products> productsDao;
 
 	@InjectMocks
 	private ProductsService productsService;
@@ -35,7 +35,7 @@ public class ProductsServiceTest {
 
 	@Test
 	public void shouldGiveList_whenMethodCalledCorrectly(){
-		when(productsDao.getAllProducts()).thenReturn(productsList);
+		when(productsDao.getAll()).thenReturn(productsList);
 		assertEquals(productsService.getProductList(), productsList);
 		assertEquals(productsList.get(0).getName(),"Yerba Mate");
 	}
@@ -43,7 +43,7 @@ public class ProductsServiceTest {
 	@Test(expected = NullPointerException.class)
 	public void shouldThrowNullPointerException_whenListWasNotInitialized() {
 		List<Products> productsLists = null;
-		when(productsDao.getAllProducts()).thenReturn(productsLists);
+		when(productsDao.getAll()).thenReturn(productsLists);
 		assertNull(productsService.getProductList().get(0));
 	}
 }

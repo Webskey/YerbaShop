@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yerbashop.dao.ProductsDao;
+import org.yerbashop.dao.GetAllDao;
 import org.yerbashop.model.Products;
 
 /**
@@ -19,10 +19,11 @@ import org.yerbashop.model.Products;
 public class ProductsService {
 
 	@Autowired
-	private ProductsDao productsDao;
+	private GetAllDao<Products> productsDao;
 
 	@Transactional(readOnly = true)
 	public List<Products> getProductList(){
-		return productsDao.getAllProducts();
+		productsDao.setClazz("Products");
+		return productsDao.getAll();
 	}
 }

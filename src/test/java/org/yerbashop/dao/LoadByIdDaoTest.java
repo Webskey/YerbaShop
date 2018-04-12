@@ -24,13 +24,13 @@ import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserDetailsDaoTest {
+public class LoadByIdDaoTest {
 
 	@Mock
 	private SessionFactory sessionFactory;
 
 	@InjectMocks
-	protected UserDetailsDao userDetailsDao;
+	protected LoadByIdDao<Users> userDetailsDao;
 
 	private static HibernateUtil hibernateUtil= new HibernateUtil();
 
@@ -53,7 +53,7 @@ public class UserDetailsDaoTest {
 
 	@Test
 	public void shouldReturnUserDetails_whenConnectedToDatabase() {
-		Users user = userDetailsDao.findUserByUsername("username");
+		Users user = userDetailsDao.findUserById("username");
 		assertEquals("username", user.getUsername());
 		assertEquals("$2a$10$NL.J1pienoiQoF6NuR/30Otx0D.rT3yeQSs4rwt9stF/Dc6xgWnKy", user.getPassword());
 		assertEquals("name", user.getFirstname());
@@ -66,13 +66,13 @@ public class UserDetailsDaoTest {
 
 	@Test
 	public void shouldUserBeNull_whenUserDoestExist() {
-		Users user = userDetailsDao.findUserByUsername("fail");
+		Users user = userDetailsDao.findUserById("fail");
 		assertNull(user);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void shouldAssertNull_whenFieldIsEmpty() {
-		Users user = userDetailsDao.findUserByUsername("usernames");
+		Users user = userDetailsDao.findUserById("usernames");
 		assertEquals("usernames", user.getUsername());
 		assertNull(user.getAdress());
 		assertEquals(true, user.isEnabled());
@@ -80,7 +80,7 @@ public class UserDetailsDaoTest {
 
 	@Test
 	public void shouldReturnROLEUSER_whenUserProvided(){
-		Users user = userDetailsDao.findUserByUsername("username");
+		Users user = userDetailsDao.findUserById("username");
 		Set<UserRoles> userRoles = user.getUserRoles();
 		String[] userRole = userRoles.stream().map(s->s.getRole()).toArray(String[]::new);
 		assertEquals(Arrays.toString(userRole),"[ROLE_USER]");
@@ -88,7 +88,7 @@ public class UserDetailsDaoTest {
 
 	@Test
 	public void shouldReturnROLEADMIN_whenAdminProvided(){
-		Users user = userDetailsDao.findUserByUsername("admin");
+		Users user = userDetailsDao.findUserById("admin");
 		Set<UserRoles> userRoles = user.getUserRoles();
 		System.out.println(userRoles);
 		String[] userRole = userRoles.stream().map(s->s.getRole()).toArray(String[]::new);
