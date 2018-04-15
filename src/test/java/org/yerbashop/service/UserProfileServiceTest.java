@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dao.LoadByIdDao;
 import org.yerbashop.model.Users;
+import org.yerbashop.model.UsersDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserProfileServiceTest {
@@ -39,13 +40,13 @@ public class UserProfileServiceTest {
 
 	@Test(expected = NullPointerException.class)
 	public void shouldThrowNullPointerException_whenUserDoesNotExist() {
-		Users nullUser = userProfileService.getUser("BadUser");
+		UsersDTO nullUser = userProfileService.getUser("BadUser");
 		assertNull(nullUser.getUsername());
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void shouldThrowNullPointerException_whenPassedNull() {
-		Users nullUser = userProfileService.getUser(null);
+		UsersDTO nullUser = userProfileService.getUser(null);
 		assertNull(nullUser.getUsername());
 	}
 }

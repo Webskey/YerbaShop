@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
 import org.yerbashop.dummybuilders.UsersDTOBuilder;
-import org.yerbashop.model.UsersDTO;
+import org.yerbashop.model.UsersValidate;
 import org.yerbashop.service.EmailService;
 import org.yerbashop.service.UserRegisterService;
 
@@ -41,7 +41,7 @@ import org.yerbashop.service.UserRegisterService;
 public class RegisterControllerTest {
 
 	private MockMvc mockMvc;
-	private UsersDTO user;
+	private UsersValidate user;
 
 	@Mock
 	private ExecutorService executor;
@@ -79,7 +79,7 @@ public class RegisterControllerTest {
 		//.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
 		.andExpect(view().name("register"))
-		.andExpect(model().attribute("user", instanceOf(UsersDTO.class)));
+		.andExpect(model().attribute("user", instanceOf(UsersValidate.class)));
 	}
 
 	@Test

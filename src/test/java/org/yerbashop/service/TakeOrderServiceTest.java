@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dummybuilders.ProductsBuilder;
-import org.yerbashop.dummybuilders.UsersBuilder;
+import org.yerbashop.dummybuilders.UsersDTOBuilder;
 import org.yerbashop.model.Products;
-import org.yerbashop.model.Users;
+import org.yerbashop.model.UsersDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TakeOrderServiceTest {
@@ -33,13 +33,13 @@ public class TakeOrderServiceTest {
 	@InjectMocks
 	private TakeOrderService takeOrderService;
 
-	private Users user;
+	private UsersDTO user;
 	private Set<Products> products;
 
 	@Before
 	public void before() {
-		UsersBuilder usersBuilder = new UsersBuilder();
-		user = usersBuilder.getUser();
+		UsersDTOBuilder usersBuilder = new UsersDTOBuilder();
+		user = usersBuilder.getUsers();
 
 		ProductsBuilder productsBuilder = new ProductsBuilder();
 		products = productsBuilder.getProductsSet();

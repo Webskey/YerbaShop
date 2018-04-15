@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dao.SaveDao;
 import org.yerbashop.dummybuilders.UsersDTOBuilder;
-import org.yerbashop.model.UsersDTO;
+import org.yerbashop.model.UsersValidate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserRegisterServiceTest {
@@ -28,7 +28,7 @@ public class UserRegisterServiceTest {
 	@InjectMocks
 	private UserRegisterService userRegisterService;
 
-	private UsersDTO userDTO;
+	private UsersValidate userDTO;
 
 	@Before
 	public void setUp() {

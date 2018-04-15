@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.yerbashop.mailMessages.WelcomeMessage;
-import org.yerbashop.model.UsersDTO;
+import org.yerbashop.model.UsersValidate;
 import org.yerbashop.service.EmailService;
 import org.yerbashop.service.UserRegisterService;
 
@@ -37,14 +37,14 @@ public class RegisterController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
-		model.addAttribute("user", new UsersDTO());
+		model.addAttribute("user", new UsersValidate());
 		return "register";
 	}
 	/**
 	 * This POST method validates user details, if they meet requirements, saves new user into database and sends him a welcome email.
 	 */
 	@RequestMapping(value = "/reg", method = RequestMethod.POST)
-	public String reg(@Validated @ModelAttribute("user") UsersDTO user, BindingResult bindingResult,Model model) {
+	public String reg(@Validated @ModelAttribute("user") UsersValidate user, BindingResult bindingResult,Model model) {
 
 		if (bindingResult.hasErrors()) {
 			return "register";

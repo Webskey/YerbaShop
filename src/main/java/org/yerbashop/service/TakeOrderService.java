@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.yerbashop.mailMessages.OrderToAdmin;
 import org.yerbashop.mailMessages.OrderToUser;
 import org.yerbashop.model.Products;
-import org.yerbashop.model.Users;
+import org.yerbashop.model.UsersDTO;
 
 @Service
 public class TakeOrderService implements Runnable{
@@ -22,7 +22,7 @@ public class TakeOrderService implements Runnable{
 	@Autowired
 	private UserProfileService userProfileService;
 
-	private Users user;
+	private UsersDTO user;
 	private String username;
 	private Set<Products> orderList;
 	private Thread thread;

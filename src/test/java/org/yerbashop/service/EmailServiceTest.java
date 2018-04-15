@@ -108,7 +108,7 @@ public class EmailServiceTest {
 
 	@Test
 	public void shouldReturnOrderToAdmin_whenMethodSendEmailInvokedProperly() throws MessagingException, IOException {
-		OrderToAdmin orderToAdmin = new OrderToAdmin(user(), list());
+		OrderToAdmin orderToAdmin = new OrderToAdmin(userDTO, list());
 		emailService.sendEmail(orderToAdmin);
 
 		Message[] messages = testSmtp.getReceivedMessages();
@@ -121,7 +121,7 @@ public class EmailServiceTest {
 
 	@Test
 	public void shouldReturnOrderToUser_whenMethodSendEmailInvokedProperly() throws MessagingException, IOException {
-		OrderToUser orderToUser = new OrderToUser(user(), list());
+		OrderToUser orderToUser = new OrderToUser(userDTO, list());
 		emailService.sendEmail(orderToUser);
 
 		Message[] messages = testSmtp.getReceivedMessages();

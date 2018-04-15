@@ -29,9 +29,10 @@
 	<c:choose>
 		<c:when test="${pageContext.request.userPrincipal.name != null}">
 			<div id="logged">
-				You're logged as: <a href="profile">
+				You're logged as: <a href="/YerbaShop/profile/info">
 					<h1>${pageContext.request.userPrincipal.name}</h1>
-				</a> <a href="logout"><h3>Logout</h3></a> <a href="basket"><h3>Basket</h3></a>
+				</a> <a href="/YerbaShop/logout"><h3>Logout</h3></a> <a
+					href="/YerbaShop/basket"><h3>Basket</h3></a>
 			</div>
 		</c:when>
 		<c:otherwise>
@@ -65,7 +66,7 @@
 				</fieldset>
 			</form:form>
 			<p></p>
-			<a href="register">Register</a>
+			<a href="/YerbaShop/register">Register</a>
 		</c:otherwise>
 	</c:choose>
 </body>
