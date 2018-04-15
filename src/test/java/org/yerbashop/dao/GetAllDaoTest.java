@@ -41,6 +41,7 @@ public class GetAllDaoTest {
 	@Before
 	public void setUp() {
 		when(sessionFactory.getCurrentSession()).thenReturn(session);
+		productsDao.setClazz("Products");
 		products = productsDao.getAll();
 	}
 
