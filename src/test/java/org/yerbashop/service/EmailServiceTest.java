@@ -3,7 +3,6 @@ package org.yerbashop.service;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.mail.Message;
@@ -22,13 +21,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.yerbashop.Credentials;
 import org.yerbashop.EmailConfig;
-import org.yerbashop.dummybuilders.UsersDTOBuilder;
+import org.yerbashop.dummybuilders.ProductsBuilder;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.mailMessages.OrderToAdmin;
 import org.yerbashop.mailMessages.OrderToUser;
 import org.yerbashop.mailMessages.WelcomeMessage;
 import org.yerbashop.model.Products;
-import org.yerbashop.model.Users;
 import org.yerbashop.model.UsersDTO;
+import org.yerbashop.model.UsersValidate;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
@@ -44,7 +44,9 @@ public class EmailServiceTest {
 	@InjectMocks
 	private EmailService emailService;
 
-	private UsersDTO userDTO;
+	private UsersValidate userValidate;
+	private UsersDTO usersDTO;
+	private Set<Products> products;
 
 	private GreenMail testSmtp;
 
@@ -58,44 +60,22 @@ public class EmailServiceTest {
 		mailSender.setPort(3025);
 		mailSender.setHost("localhost");
 
-		UsersDTOBuilder usersDTOBuilder = new UsersDTOBuilder();
-		userDTO = usersDTOBuilder.getUsers();		
+		UsersModelBuilder usersModelBuilder = new UsersModelBuilder(UsersValidate.class);
+		userValidate = (UsersValidate) usersModelBuilder.getObject();
+		UsersModelBuilder usersModelBuilder2 = new UsersModelBuilder(UsersDTO.class);
+		usersDTO = (UsersDTO) usersModelBuilder2.getObject();
+		ProductsBuilder productsBuilder = new ProductsBuilder();
+		products = productsBuilder.getProductsSet();
 	}
 
 	@After
 	public void cleanup(){
 		testSmtp.stop();
-	}
-
-	private Set<Products> list(){
-
-		Set<Products> list = new HashSet<>();
-
-		Products p1 = new Products();
-		p1.setName("Yerba Mate");
-
-		Products p2 = new Products();
-		p2.setName("Green Mate");
-
-		list.add(p1);
-		list.add(p2);
-
-		return list;
-	}
-
-	private Users user() {
-		Users user = new Users();
-		user.setUsername("username");
-		user.setFirstname("firstname");
-		user.setLastname("lastname");
-		user.setEmail("email@email.com");
-		user.setPhoneNr("phoneNr");
-		return user;
-	}
+	}	
 
 	@Test
 	public void shouldReturnWelcomeMessageDetails_whenMethodSendEmailInvokedProperly() throws MessagingException {
-		WelcomeMessage welcomeMessage = new WelcomeMessage(userDTO);
+		WelcomeMessage welcomeMessage = new WelcomeMessage(userValidate);
 		emailService.sendEmail(welcomeMessage);
 
 		Message[] messages = testSmtp.getReceivedMessages();
@@ -103,12 +83,12 @@ public class EmailServiceTest {
 		assertEquals(welcomeMessage.getMessage().getSubject(), messages[0].getSubject());
 		String body = GreenMailUtil.getBody(messages[0]).replaceAll("[\\r\\n]+", "");
 		assertEquals(welcomeMessage.getMessage().getText().replaceAll("[\\r\\n]+", ""), body);
-		assertEquals(userDTO.getEmail(), messages[0].getAllRecipients()[0].toString());
+		assertEquals(userValidate.getEmail(), messages[0].getAllRecipients()[0].toString());
 	}
 
 	@Test
 	public void shouldReturnOrderToAdmin_whenMethodSendEmailInvokedProperly() throws MessagingException, IOException {
-		OrderToAdmin orderToAdmin = new OrderToAdmin(userDTO, list());
+		OrderToAdmin orderToAdmin = new OrderToAdmin(usersDTO, products);
 		emailService.sendEmail(orderToAdmin);
 
 		Message[] messages = testSmtp.getReceivedMessages();
@@ -121,7 +101,7 @@ public class EmailServiceTest {
 
 	@Test
 	public void shouldReturnOrderToUser_whenMethodSendEmailInvokedProperly() throws MessagingException, IOException {
-		OrderToUser orderToUser = new OrderToUser(userDTO, list());
+		OrderToUser orderToUser = new OrderToUser(usersDTO, products);
 		emailService.sendEmail(orderToUser);
 
 		Message[] messages = testSmtp.getReceivedMessages();
@@ -129,7 +109,7 @@ public class EmailServiceTest {
 		assertEquals(orderToUser.getMessage().getSubject(), messages[0].getSubject());
 		String body = GreenMailUtil.getBody(messages[0]).replaceAll("[\\r\\n]+", "");
 		assertEquals(orderToUser.getMessage().getText().replaceAll("[\\r\\n]+", ""), body);
-		assertEquals(user().getEmail(), messages[0].getAllRecipients()[0].toString());
+		assertEquals(usersDTO.getEmail(), messages[0].getAllRecipients()[0].toString());
 	}
 
 	@Test
@@ -156,7 +136,7 @@ public class EmailServiceTest {
 
 	@Test(expected=java.lang.NullPointerException.class)
 	public void shouldThrowNullPointerException_whenEmailFieldIsNull() throws MessagingException {
-		userDTO.setEmail(null);
-		emailService.sendEmail(new WelcomeMessage(userDTO));
+		userValidate.setEmail(null);
+		emailService.sendEmail(new WelcomeMessage(userValidate));
 	}
 }

@@ -20,16 +20,16 @@ public class UserRegisterService {
 	private UserRoles userRoles;
 
 	@Transactional
-	public void register(UsersValidate userDTO) throws ConstraintViolationException{
+	public void register(UsersValidate userValidate) throws ConstraintViolationException{
 
 		this.user = new Users();
-		user.setUsername(userDTO.getUsername());
-		user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-		user.setFirstname(userDTO.getFirstname());
-		user.setLastname(userDTO.getLastname());
-		user.setEmail(userDTO.getEmail());
-		user.setAdress(userDTO.getAdress());
-		user.setPhoneNr(userDTO.getPhoneNr());
+		user.setUsername(userValidate.getUsername());
+		user.setPassword(new BCryptPasswordEncoder().encode(userValidate.getPassword()));
+		user.setFirstname(userValidate.getFirstname());
+		user.setLastname(userValidate.getLastname());
+		user.setEmail(userValidate.getEmail());
+		user.setAdress(userValidate.getAdress());
+		user.setPhoneNr(userValidate.getPhoneNr());
 		user.setEnabled(true);
 		saveDao.save(user);
 

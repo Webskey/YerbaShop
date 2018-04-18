@@ -1,6 +1,7 @@
 package org.yerbashop.controller;
 
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -11,8 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 
@@ -33,9 +34,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
-import org.yerbashop.dummybuilders.UsersBuilder;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.model.Orders;
-import org.yerbashop.model.Users;
+import org.yerbashop.model.UsersDTO;
 import org.yerbashop.service.UserProfileService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -65,17 +66,15 @@ public class ProfileControllerTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	private Users userTest() {
-		UsersBuilder usersBuilder = new UsersBuilder();
-		Users user = usersBuilder.getUser();
-		
+	private UsersDTO userTest() {
+		UsersModelBuilder usersModelBuilder = new UsersModelBuilder(UsersDTO.class);
+		UsersDTO user = (UsersDTO) usersModelBuilder.getObject();
+
 		Orders order = new Orders();
 		order.setId(12);
-		order.setUsers(user);
 
-		Set<Orders> orders = new HashSet<Orders>();
+		List<Orders> orders = new ArrayList<Orders>();
 		orders.add(order);
-
 		user.setOrders(orders);
 		return user;
 	}
@@ -94,14 +93,10 @@ public class ProfileControllerTest {
 		when(principal.getName()).thenReturn(username);
 		when(userProfileService.getUser(username)).thenReturn(userTest());
 
-		this.mockMvc.perform(get("/profile").principal(principal))
+		this.mockMvc.perform(get("/profile/info").principal(principal))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("username", "username"))
-		.andExpect(model().attribute("firstname", "firstname"))
-		.andExpect(model().attribute("lastname", "lastname"))
-		.andExpect(model().attribute("email", "email@email.com"))
-		.andExpect(model().attribute("phoneNr", "phoneNr"))
-		.andExpect(model().attribute("orderList", hasItem(instanceOf(Orders.class))))
+		.andExpect(model().attribute("user", instanceOf(UsersDTO.class)))
+		.andExpect(model().attribute("user", hasProperty("orders", hasItem(instanceOf(Orders.class)))))
 		.andExpect(view().name("profile"));
 
 		assertEquals(userTest().getUsername(),username);

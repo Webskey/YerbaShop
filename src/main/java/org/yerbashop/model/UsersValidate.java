@@ -19,6 +19,7 @@ public class UsersValidate {
 	private String password;
 
 	private boolean enabled;
+	
 	@Pattern(regexp="[0-9]{9}", message="Wrong phone number format.")
 	private String phoneNr;
 

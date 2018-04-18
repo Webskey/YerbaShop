@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
-import org.yerbashop.dummybuilders.UsersDTOBuilder;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.model.UsersValidate;
 import org.yerbashop.service.EmailService;
 import org.yerbashop.service.UserRegisterService;
@@ -68,8 +68,8 @@ public class RegisterControllerTest {
 				.setViewResolvers(viewResolver)
 				.build();
 		
-		UsersDTOBuilder usersDTOBuilder = new UsersDTOBuilder();
-		user = usersDTOBuilder.getUsers();
+		UsersModelBuilder usersModelBuilder = new UsersModelBuilder(UsersValidate.class);
+		user = (UsersValidate) usersModelBuilder.getObject();
 	}
 
 	@Test

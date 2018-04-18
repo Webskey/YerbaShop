@@ -15,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.HibernateUtil;
-import org.yerbashop.dummybuilders.UsersBuilder;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.model.Users;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,8 +46,8 @@ public class SaveDaoTest {
 		transaction = session.getTransaction();
 		transaction.begin();
 
-		UsersBuilder usersBuilder = new UsersBuilder();
-		user = usersBuilder.getUser();
+		UsersModelBuilder usersBuilder = new UsersModelBuilder(Users.class);
+		user = (Users) usersBuilder.getObject();
 	}
 
 	public void  after(Object object) {

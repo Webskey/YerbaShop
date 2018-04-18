@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dao.LoadByIdDao;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.model.Users;
 import org.yerbashop.model.UsersDTO;
 
@@ -23,19 +24,22 @@ public class UserProfileServiceTest {
 	@InjectMocks
 	private UserProfileService userProfileService;
 
+	private UsersDTO userDTO;
 	private Users user;
 
 	@Before
 	public void setUp() {
-		user = new Users();
-		user.setUsername("TestUsername");
-		when(userDetailsDao.findUserById("TestUsername")).thenReturn(user);
+		UsersModelBuilder userModelBuilder1 = new UsersModelBuilder(Users.class);
+		user = (Users) userModelBuilder1.getObject();
+		when(userDetailsDao.findUserById("Username")).thenReturn(user);
 	}
 
 	@Test
-	public void shouldPass_whenUserExists(){
-		assertEquals(userProfileService.getUser("TestUsername"),user);
-		assertEquals(user.getUsername(),"TestUsername");
+	public void shouldPass_whenUserExists() {		
+		userDTO = userProfileService.getUser("Username");
+		assertEquals(userDTO.getClass(), UsersDTO.class);	
+		assertEquals(userDTO.getOrders().isEmpty(), true);
+		assertEquals(userDTO.getFirstname(), "firstname");			
 	}
 
 	@Test(expected = NullPointerException.class)

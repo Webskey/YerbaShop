@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dummybuilders.ProductsBuilder;
-import org.yerbashop.dummybuilders.UsersDTOBuilder;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.model.Products;
 import org.yerbashop.model.UsersDTO;
 
@@ -38,8 +38,8 @@ public class TakeOrderServiceTest {
 
 	@Before
 	public void before() {
-		UsersDTOBuilder usersBuilder = new UsersDTOBuilder();
-		user = usersBuilder.getUsers();
+		UsersModelBuilder usersBuilder = new UsersModelBuilder(UsersDTO.class);
+		user = (UsersDTO) usersBuilder.getObject();
 
 		ProductsBuilder productsBuilder = new ProductsBuilder();
 		products = productsBuilder.getProductsSet();
