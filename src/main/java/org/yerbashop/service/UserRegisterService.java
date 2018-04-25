@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yerbashop.dao.SaveDao;
 import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
-import org.yerbashop.model.UsersDTO;
+import org.yerbashop.model.UsersValidate;
 
 @Service
 public class UserRegisterService {
@@ -20,16 +20,16 @@ public class UserRegisterService {
 	private UserRoles userRoles;
 
 	@Transactional
-	public void register(UsersDTO userDTO) throws ConstraintViolationException{
+	public void register(UsersValidate userValidate) throws ConstraintViolationException{
 
 		this.user = new Users();
-		user.setUsername(userDTO.getUsername());
-		user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-		user.setFirstname(userDTO.getFirstname());
-		user.setLastname(userDTO.getLastname());
-		user.setEmail(userDTO.getEmail());
-		user.setAdress(userDTO.getAdress());
-		user.setPhoneNr(userDTO.getPhoneNr());
+		user.setUsername(userValidate.getUsername());
+		user.setPassword(new BCryptPasswordEncoder().encode(userValidate.getPassword()));
+		user.setFirstname(userValidate.getFirstname());
+		user.setLastname(userValidate.getLastname());
+		user.setEmail(userValidate.getEmail());
+		user.setAdress(userValidate.getAdress());
+		user.setPhoneNr(userValidate.getPhoneNr());
 		user.setEnabled(true);
 		saveDao.save(user);
 

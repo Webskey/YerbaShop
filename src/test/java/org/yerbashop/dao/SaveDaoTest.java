@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.HibernateUtil;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
 import org.yerbashop.model.Users;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,6 +33,8 @@ public class SaveDaoTest {
 
 	private Transaction transaction;
 
+	private Users user;
+
 	@BeforeClass
 	public static void beforeClass() {
 		session = hibernateUtil.getSessionFactory().openSession();
@@ -42,6 +45,9 @@ public class SaveDaoTest {
 		when(sessionFactory.getCurrentSession()).thenReturn(session);
 		transaction = session.getTransaction();
 		transaction.begin();
+
+		UsersModelBuilder usersBuilder = new UsersModelBuilder(Users.class);
+		user = (Users) usersBuilder.getObject();
 	}
 
 	public void  after(Object object) {
@@ -59,33 +65,18 @@ public class SaveDaoTest {
 
 	@Test
 	public void shouldSaveProperly_whenDetailsProvidedCorrectly() {
-		saveDao.save(user());
+		user.setUsername("foo");
+		saveDao.save(user);
 		transaction.commit();
-		Users duzer = session.load(Users.class, user().getUsername());
-		assertEquals(user().getFirstname(),duzer.getFirstname());
+		Users duzer = session.load(Users.class, user.getUsername());
+		assertEquals(user.getFirstname(),duzer.getFirstname());
 
-		after(user());
+		after(user);
 	}
 
 	@Test(expected=javax.persistence.PersistenceException.class)
 	public void shouldThrowConstraitViolationException_whenUsernameAlreadyExists() {
-		Users existing =user();
-		existing.setUsername("username");
-
-		saveDao.save(existing);
+		saveDao.save(user);
 		transaction.commit();
-	}
-
-	private Users user(){
-		Users user = new Users();
-		user.setUsername("usertest");
-		user.setPassword("password");
-		user.setFirstname("firstname");
-		user.setLastname("lastname");
-		user.setAdress("adress");
-		user.setEmail("email@email.com");
-		user.setPhoneNr("phoneNr");
-		user.setEnabled(true);
-		return user;
 	}
 }

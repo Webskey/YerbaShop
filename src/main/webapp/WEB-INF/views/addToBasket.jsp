@@ -31,7 +31,7 @@ h2 {
 		window.history.go(-1);
 	}
 	function goBasket() {
-		window.location.href = "basket";
+		window.location.href = "/YerbaShop/basket";
 	}
 </script>
 </html>

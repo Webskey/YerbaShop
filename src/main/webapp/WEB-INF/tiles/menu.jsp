@@ -22,28 +22,28 @@ p {
 <body>
 
 	<p class="menu-main">
-		<a href="index">HOME</a>
+		<a href="/YerbaShop/">HOME</a>
 	</p>
 	<p class="menu-main">
-		<a href="products?cat=">PRODUCTS</a>
+		<a href="/YerbaShop/products?cat=">PRODUCTS</a>
 	</p>
 	<p class="menu-sub">
-		<a href="products?cat=Yerba">Yerba Mate</a>
+		<a href="/YerbaShop/products?cat=Yerba">Yerba Mate</a>
 	</p>
 	<p class="menu-sub-sub">
-		<a href="products?cat=classic">Classic</a>
+		<a href="/YerbaShop/products?cat=classic">Classic</a>
 	</p>
 	<p class="menu-sub-sub">
-		<a href="products?cat=flavoured">Flavoured</a>
+		<a href="/YerbaShop/products?cat=flavoured">Flavoured</a>
 	</p>
 	<p class="menu-sub">
-		<a href="products?cat=Accesories">Accesories</a>
+		<a href="/YerbaShop/products?cat=Accesories">Accesories</a>
 	</p>
 	<p class="menu-sub-sub">
-		<a href="products?cat=gourds">Gourds</a>
+		<a href="/YerbaShop/products?cat=gourds">Gourds</a>
 	</p>
 	<p class="menu-sub-sub">
-		<a href="products?cat=bombillas">Bombillas</a>
+		<a href="/YerbaShop/products?cat=bombillas">Bombillas</a>
 	</p>
 
 

@@ -4,13 +4,13 @@ import java.util.Set;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.yerbashop.model.Products;
-import org.yerbashop.model.Users;
+import org.yerbashop.model.UsersDTO;
 
 public class OrderToAdmin implements MessageCreator {
 
 	private SimpleMailMessage message;
 
-	public OrderToAdmin(Users user, Set<Products> order) {
+	public OrderToAdmin(UsersDTO user, Set<Products> order) {
 
 		String products = "";
 		int totalPrice = 0;

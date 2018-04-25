@@ -7,20 +7,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yerbashop.dao.UserDetailsDao;
+import org.yerbashop.dao.LoadByIdDao;
 import org.yerbashop.model.Users;
 
 @Service("userDetailsService")
-public class UserDetailsServiceImp implements UserDetailsService {
+public class UserLoginService implements UserDetailsService {
 
 	@Autowired
-	private UserDetailsDao userDetailsDao;
+	private LoadByIdDao<Users> userDetailsDao;
 
 	@Transactional(readOnly = true)
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		userDetailsDao.setClazz("org.yerbashop.model.Users");
 
-		Users user = userDetailsDao.findUserByUsername(username);
+		Users user = userDetailsDao.findUserById(username);
 		UserBuilder builder = null;
 		if (user != null) {
 

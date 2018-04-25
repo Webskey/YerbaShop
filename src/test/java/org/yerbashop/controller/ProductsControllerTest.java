@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +36,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
+import org.yerbashop.dummybuilders.ProductsBuilder;
 import org.yerbashop.model.Products;
 import org.yerbashop.service.ProductsService;
 import org.yerbashop.service.TakeOrderService;
@@ -63,14 +63,15 @@ public class ProductsControllerTest {
 	@InjectMocks
 	private ProductsController productsController;
 
-
 	private List<Products> products;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
-		products = productsList();
+		
+		ProductsBuilder productsBuilder = new ProductsBuilder();
+		products = productsBuilder.getProductsList();
+		
 		when(productsService.getProductList()).thenReturn(products);
 		when(principal.getName()).thenReturn("username");
 
@@ -81,32 +82,6 @@ public class ProductsControllerTest {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(productsController)
 				.setViewResolvers(viewResolver)
 				.build();
-	}
-
-	private List<Products> productsList(){
-		products = new ArrayList<Products>();
-
-		Products p1 = new Products();
-		Products p2 = new Products();
-		Products p3 = new Products();
-
-		p1.setName("Yerba Mate");
-		p1.setCategory("classicYerba");
-		p1.setPrice(20);
-
-		p2.setName("Green Mate");
-		p2.setCategory("flavouredYerba");
-		p2.setPrice(10);
-
-		p3.setName("Metal Gourd");
-		p3.setCategory("gourdsAccesories");
-		p3.setPrice(15);
-
-		products.add(p1);
-		products.add(p2);
-		products.add(p3);
-
-		return products;
 	}
 
 	@Test
@@ -160,7 +135,7 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldRemoveProductFromBasket_whenRemoveFromBasketPostMethodCalled() throws Exception{
-		orderList.addAll(productsList());
+		orderList.addAll(products);
 
 		this.mockMvc.perform(post("/remove-from-basket").flashAttr("Products", products.get(0)).flashAttr("orderList", orderList))
 		.andExpect(redirectedUrl("basket"))
@@ -172,7 +147,7 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldReturnOrderListAsModelAttr_whenBasketMethodCalled() throws Exception{
-		orderList.addAll(productsList());
+		orderList.addAll(products);
 
 		this.mockMvc.perform(get("/basket").flashAttr("orderList", orderList))
 		.andExpect(status().isOk())
@@ -196,7 +171,7 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldMakeOrderThings_whenOrdercalled() throws Exception {
-		orderList.addAll(productsList());
+		orderList.addAll(products);
 
 		this.mockMvc.perform(post("/order").principal(principal).flashAttr("orderList", orderList))
 		.andDo(MockMvcResultHandlers.print())

@@ -16,7 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yerbashop.dao.SaveDao;
-import org.yerbashop.model.UsersDTO;
+import org.yerbashop.dummybuilders.UsersModelBuilder;
+import org.yerbashop.model.UsersValidate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserRegisterServiceTest {
@@ -27,33 +28,27 @@ public class UserRegisterServiceTest {
 	@InjectMocks
 	private UserRegisterService userRegisterService;
 
-	private UsersDTO userDTO;
+	private UsersValidate userValidate;
 
 	@Before
 	public void setUp() {
-		userDTO = new UsersDTO();
-		userDTO.setUsername("username");
-		userDTO.setPassword("password");
-		userDTO.setFirstname("firstname");
-		userDTO.setLastname("lastname");
-		userDTO.setEmail("email@email.com");
-		userDTO.setAdress("adress");
-		userDTO.setPhoneNr("phoneNr");
+		UsersModelBuilder usersModelBuilder = new UsersModelBuilder(UsersValidate.class);
+		userValidate = (UsersValidate) usersModelBuilder.getObject();
 	}
 
 	@Test
 	public void shouldMatchUsersDetailsExceptPassword_whenAllDataProvidedCorrectly()throws Exception{
 		doNothing().when(saveDao).save(any());
 
-		userRegisterService.register(userDTO);
+		userRegisterService.register(userValidate);
 
-		assertEquals(userDTO.getUsername(),userRegisterService.getUsers().getUsername());
-		assertEquals(userDTO.getFirstname(),userRegisterService.getUsers().getFirstname());
-		assertEquals(userDTO.getLastname(),userRegisterService.getUsers().getLastname());
-		assertEquals(userDTO.getEmail(),userRegisterService.getUsers().getEmail());
-		assertEquals(userDTO.getPhoneNr(),userRegisterService.getUsers().getPhoneNr());
-		assertEquals(userDTO.getAdress(),userRegisterService.getUsers().getAdress());
-		assertNotEquals(userDTO.getPassword(),userRegisterService.getUsers().getPassword());
+		assertEquals(userValidate.getUsername(),userRegisterService.getUsers().getUsername());
+		assertEquals(userValidate.getFirstname(),userRegisterService.getUsers().getFirstname());
+		assertEquals(userValidate.getLastname(),userRegisterService.getUsers().getLastname());
+		assertEquals(userValidate.getEmail(),userRegisterService.getUsers().getEmail());
+		assertEquals(userValidate.getPhoneNr(),userRegisterService.getUsers().getPhoneNr());
+		assertEquals(userValidate.getAdress(),userRegisterService.getUsers().getAdress());
+		assertNotEquals(userValidate.getPassword(),userRegisterService.getUsers().getPassword());
 
 		verify(saveDao, times(2)).save(any());
 	}
@@ -62,10 +57,10 @@ public class UserRegisterServiceTest {
 	public void shouldReturnUsersRoles_whenMethodSaveInvoked()throws Exception {
 		doNothing().when(saveDao).save(any());
 
-		userRegisterService.register(userDTO);
+		userRegisterService.register(userValidate);
 
 		assertEquals(userRegisterService.getUsers(),userRegisterService.getUserRoles().getUsers());
-		assertEquals(userDTO.getUsername(),userRegisterService.getUserRoles().getUsers().getUsername());
+		assertEquals(userValidate.getUsername(),userRegisterService.getUserRoles().getUsers().getUsername());
 		assertEquals("ROLE_USER",userRegisterService.getUserRoles().getRole());
 
 		verify(saveDao, times(2)).save(any());
@@ -74,7 +69,7 @@ public class UserRegisterServiceTest {
 	@Test(expected = ConstraintViolationException.class)
 	public void shouldConstraintViolationException_whenUserAlreadytExists() throws Exception{
 		doThrow(ConstraintViolationException.class).when(saveDao).save(any());
-		userRegisterService.register(userDTO);
+		userRegisterService.register(userValidate);
 	}
 
 	@Test(expected = NullPointerException.class)

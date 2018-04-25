@@ -1,13 +1,13 @@
 package org.yerbashop.mailMessages;
 
 import org.springframework.mail.SimpleMailMessage;
-import org.yerbashop.model.UsersDTO;
+import org.yerbashop.model.UsersValidate;
 
 public class WelcomeMessage implements MessageCreator {
 
 	private SimpleMailMessage message;
 
-	public WelcomeMessage(UsersDTO user) {
+	public WelcomeMessage(UsersValidate user) {
 
 		message = new SimpleMailMessage(); 
 		message.setTo(user.getEmail()); 
