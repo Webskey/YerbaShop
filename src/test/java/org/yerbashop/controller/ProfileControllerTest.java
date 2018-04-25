@@ -4,8 +4,12 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,14 +65,17 @@ public class ProfileControllerTest {
 	@InjectMocks
 	private ProfileController profileController;
 
+	private UsersDTO user;
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		userTest();
 	}
 
-	private UsersDTO userTest() {
+	private void userTest() {
 		UsersModelBuilder usersModelBuilder = new UsersModelBuilder(UsersDTO.class);
-		UsersDTO user = (UsersDTO) usersModelBuilder.getObject();
+		user = (UsersDTO) usersModelBuilder.getObject();
 
 		Orders order = new Orders();
 		order.setId(12);
@@ -76,7 +83,6 @@ public class ProfileControllerTest {
 		List<Orders> orders = new ArrayList<Orders>();
 		orders.add(order);
 		user.setOrders(orders);
-		return user;
 	}
 
 	@Test
@@ -91,7 +97,7 @@ public class ProfileControllerTest {
 
 		String username = "username";
 		when(principal.getName()).thenReturn(username);
-		when(userProfileService.getUser(username)).thenReturn(userTest());
+		when(userProfileService.getUser(username)).thenReturn(user);
 
 		this.mockMvc.perform(get("/profile/info").principal(principal))
 		.andExpect(status().isOk())
@@ -99,7 +105,7 @@ public class ProfileControllerTest {
 		.andExpect(model().attribute("user", hasProperty("orders", hasItem(instanceOf(Orders.class)))))
 		.andExpect(view().name("profile"));
 
-		assertEquals(userTest().getUsername(),username);
+		assertEquals(user.getUsername(),username);
 	}
 
 	@Test
@@ -113,5 +119,46 @@ public class ProfileControllerTest {
 		this.mockMvc.perform(get("/profile"))
 		.andExpect(status().isFound())
 		.andExpect(redirectedUrl("http://localhost/login"));
+	}
+
+	@Test
+	public void shouldChangeProfileDetails() throws Exception {
+
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/WEB-INF/jsp/view/");
+		viewResolver.setSuffix(".jsp");
+		this.mockMvc = MockMvcBuilders.standaloneSetup(profileController)
+				.setViewResolvers(viewResolver)
+				.build();
+
+		doAnswer(invocation-> {
+			user.setEmail("newemail@email.com");
+			return null;
+		}).when(userProfileService).update(user);
+
+		this.mockMvc.perform(post("/profile/changed").flashAttr("user", user))
+		.andExpect(status().isFound())
+		.andExpect(view().name("redirect:/"));
+
+		verify(userProfileService, times(1)).update(user);
+		assertEquals(user.getEmail(), "newemail@email.com");
+	}
+
+	@Test
+	public void shouldRejectChange_whenUserDetailsNotValidated() throws Exception {
+
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/WEB-INF/jsp/view/");
+		viewResolver.setSuffix(".jsp");
+		this.mockMvc = MockMvcBuilders.standaloneSetup(profileController)
+				.setViewResolvers(viewResolver)
+				.build();
+
+		user.setPhoneNr("SA");
+
+		this.mockMvc.perform(post("/profile/changed").flashAttr("user", user))
+		.andExpect(status().isOk())
+		.andExpect(model().attributeHasFieldErrors("user", "phoneNr"))
+		.andExpect(view().name("profile"));
 	}
 }
