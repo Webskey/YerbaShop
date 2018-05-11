@@ -54,9 +54,10 @@ public class LoadByIdDaoTest {
 
 	@Test
 	public void shouldReturnUserDetails_whenConnectedToDatabase() {
+		//when
 		Users user = loadByIdDao.findUserById("username");
+		//then
 		assertEquals("username", user.getUsername());
-		assertEquals("$2a$10$NL.J1pienoiQoF6NuR/30Otx0D.rT3yeQSs4rwt9stF/Dc6xgWnKy", user.getPassword());
 		assertEquals("name", user.getFirstname());
 		assertEquals("surname", user.getLastname());
 		assertEquals("email@email.com", user.getEmail());
@@ -66,27 +67,30 @@ public class LoadByIdDaoTest {
 	}
 
 	@Test(expected = org.hibernate.ObjectNotFoundException.class)
-	public void shouldAssertNull_whenFieldIsEmpty() {
+	public void shouldThrow_whenIncorrectUsername() {
+		//when
 		Users user = loadByIdDao.findUserById("usernames");
-		assertEquals("usernames", user.getUsername());
-		assertNull(user.getAdress());
-		assertEquals(true, user.isEnabled());
+		//then		
+		assertNull(user);		
 	}
 
 	@Test
-	public void shouldReturnROLEUSER_whenUserProvided(){
+	public void shouldReturnROLE_USER_whenUserProvided(){
+		//when
 		Users user = loadByIdDao.findUserById("username");
 		Set<UserRoles> userRoles = user.getUserRoles();
 		String[] userRole = userRoles.stream().map(s->s.getRole()).toArray(String[]::new);
+		//then
 		assertEquals(Arrays.toString(userRole),"[ROLE_USER]");
 	}
 
 	@Test
-	public void shouldReturnROLEADMIN_whenAdminProvided(){
+	public void shouldReturnROLE_ADMIN_whenAdminProvided(){
+		//when
 		Users user = loadByIdDao.findUserById("admin");
 		Set<UserRoles> userRoles = user.getUserRoles();
-		System.out.println(userRoles);
 		String[] userRole = userRoles.stream().map(s->s.getRole()).toArray(String[]::new);
+		//then
 		assertThat(userRole, arrayContainingInAnyOrder("ROLE_USER","ROLE_ADMIN"));
 	}
 }

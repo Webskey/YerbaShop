@@ -50,6 +50,11 @@ public class SaveDaoTest {
 		user = (Users) usersBuilder.getObject();
 	}
 
+	@AfterClass
+	public static void  afterClass() {
+		hibernateUtil.shutdown();
+	}
+	
 	public void  after(Object object) {
 		transaction = session.getTransaction();
 		transaction.begin();
@@ -58,24 +63,22 @@ public class SaveDaoTest {
 		transaction.commit();
 	}
 
-	@AfterClass
-	public static void  afterClass() {
-		hibernateUtil.shutdown();
-	}
-
 	@Test
-	public void shouldSaveProperly_whenDetailsProvidedCorrectly() {
+	public void shouldSaveUser_whenCorrectData() {
+		//given
 		user.setUsername("foo");
+		//when
 		saveDao.save(user);
 		transaction.commit();
+		//then
 		Users duzer = session.load(Users.class, user.getUsername());
-		assertEquals(user.getFirstname(),duzer.getFirstname());
-
+		assertEquals(user, duzer);
+		//finally
 		after(user);
 	}
 
 	@Test(expected=javax.persistence.PersistenceException.class)
-	public void shouldThrowConstraitViolationException_whenUsernameAlreadyExists() {
+	public void shouldThrow_whenUsernameAlreadyExists() {
 		saveDao.save(user);
 		transaction.commit();
 	}
