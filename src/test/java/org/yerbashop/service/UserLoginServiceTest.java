@@ -22,7 +22,7 @@ import org.yerbashop.model.UserRoles;
 import org.yerbashop.model.Users;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserDetailsServiceTest {
+public class UserLoginServiceTest {
 
 	@Mock
 	private LoadByIdDao<Users> userDetailsDao;
@@ -46,25 +46,25 @@ public class UserDetailsServiceTest {
 	}
 
 	@Test
-	public void shouldMatchUsersDetailsExceptPassword_whenAllDataProvidedCorrectly()throws Exception{
-
+	public void shouldMatchUsersDetails_whenAllDataProvidedCorrectly() throws Exception{
+		//given
 		when(userDetailsDao.findUserById("username")).thenReturn(user);
-
+		//when
 		UserDetails userDetails = userDetailsService.loadUserByUsername("username");
-
-		assertEquals("password",userDetails.getPassword());
-		assertEquals("username",userDetails.getUsername());
-		assertEquals("[ROLE_USER]",userDetails.getAuthorities().toString());
+		//then
+		assertEquals("password", userDetails.getPassword());
+		assertEquals("username", userDetails.getUsername());
+		assertEquals("[ROLE_USER]", userDetails.getAuthorities().toString());
 		assertEquals(true, userDetails.isEnabled());
 	}
 
-	@Test(expected=UsernameNotFoundException.class)
-	public void shouldThrowException_whenUserIsNull()throws Exception{
-
+	@Test(expected = UsernameNotFoundException.class)
+	public void shouldThrowException_whenUserIsNull() throws Exception{
+		//given
 		when(userDetailsDao.findUserById(any())).thenReturn(null);
-
+		//when
 		UserDetails userDetails = userDetailsService.loadUserByUsername("username");
-
+		//then
 		assertNull(userDetails);
 	}
 }

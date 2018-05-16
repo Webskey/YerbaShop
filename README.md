@@ -37,10 +37,10 @@
 
 * Add admin panel to manage orders and users
 * Complete documentation
-* Better test methods names + (given,when,then)
+* ~~Better test methods names + (given,when,then)~~
 * Add remember-me feature
 * Logs with log4j
-* Add Update/Change user profile details(firstname, adress etc.) feature
+* ~~Add Update/Change user profile details(firstname, adress etc.) feature~~
 
 ### Index page
 <img src="https://i.imgur.com/9NMIbP0.jpg" alt="Index page" height="200" width="300">
@@ -49,7 +49,10 @@
 <img src="https://i.imgur.com/QG0nBLW.jpg" alt="Register page" height="200" width="300">
 
 ### Profile page
-<img src="https://i.imgur.com/Lgo13Nc.jpg" alt="Profile page" height="200" width="300">
+<img src="https://i.imgur.com/AqfSXZj.png" alt="Profile page" height="200" width="300">
+
+### Profile details change page
+<img src="https://i.imgur.com/GI88Fk3.png" alt="Profile change details page" height="200" width="300">
 
 ### Products page
 <img src="https://i.imgur.com/twSiSqD.jpg" alt="Products page" height="200" width="300">

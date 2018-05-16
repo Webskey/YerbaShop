@@ -47,13 +47,33 @@ public class TakeOrderServiceTest {
 
 	@Test
 	public void shouldCallOtherServices_whenMethodRunInvoked() {
+		//given
 		when(userProfileService.getUser("username")).thenReturn(user);
-
 		takeOrderService.setOrder("username", products);
+		//when
 		takeOrderService.run();
-
-		verify(emailService,times(2)).sendEmail(any());
+		//then
+		verify(emailService, times(2)).sendEmail(any());
 		verify(userProfileService).getUser("username");
 		verify(saveOrdersService).saveOrders(user, products);
+	}
+
+	@Test (expected = NullPointerException.class)
+	public void shouldThrowNullPointerException_whenUsernameIncorrect() {
+		//given
+		when(userProfileService.getUser("username")).thenReturn(null);		
+		takeOrderService.setOrder("username", products);
+		//when
+		takeOrderService.run();
+		//then NullPointerException thrown
+	}
+
+	@Test (expected = NullPointerException.class)
+	public void shouldThrowNullPointerException_whenProductsListNull() {
+		//given		
+		takeOrderService.setOrder("username", null);
+		//when
+		takeOrderService.run();
+		//then NullPointerException thrown
 	}
 }

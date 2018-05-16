@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -70,10 +71,7 @@ public class ProfileControllerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		userTest();
-	}
 
-	private void userTest() {
 		UsersModelBuilder usersModelBuilder = new UsersModelBuilder(UsersDTO.class);
 		user = (UsersDTO) usersModelBuilder.getObject();
 
@@ -86,8 +84,8 @@ public class ProfileControllerTest {
 	}
 
 	@Test
-	public void shouldReturnProfileDetails_whenUserProvided() throws Exception {
-
+	public void shouldReturnProfileDetails_whenUserLoggedIn() throws Exception {
+		//given
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/jsp/view/");
 		viewResolver.setSuffix(".jsp");
@@ -98,8 +96,9 @@ public class ProfileControllerTest {
 		String username = "username";
 		when(principal.getName()).thenReturn(username);
 		when(userProfileService.getUser(username)).thenReturn(user);
-
+		//when
 		this.mockMvc.perform(get("/profile/info").principal(principal))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("user", instanceOf(UsersDTO.class)))
 		.andExpect(model().attribute("user", hasProperty("orders", hasItem(instanceOf(Orders.class)))))
@@ -109,21 +108,22 @@ public class ProfileControllerTest {
 	}
 
 	@Test
-	public void shouldReturnStatus403_whenUserNotLoggedIn() throws Exception {
-
+	public void shouldStatus403AndRedirectToLoginPage_whenUserNotLoggedIn() throws Exception {
+		//given
 		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac)
 				.apply(SecurityMockMvcConfigurers.springSecurity())
 				.addFilters(springSecurityFilterChain);
 		this.mockMvc = builder.build();
-
+		//when
 		this.mockMvc.perform(get("/profile"))
+		//then
 		.andExpect(status().isFound())
 		.andExpect(redirectedUrl("http://localhost/login"));
 	}
 
 	@Test
-	public void shouldChangeProfileDetails() throws Exception {
-
+	public void shouldChangeProfileDetails_whenUserDetailsValidated() throws Exception {
+		//given
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/jsp/view/");
 		viewResolver.setSuffix(".jsp");
@@ -135,8 +135,9 @@ public class ProfileControllerTest {
 			user.setEmail("newemail@email.com");
 			return null;
 		}).when(userProfileService).update(user);
-
+		//when
 		this.mockMvc.perform(post("/profile/changed").flashAttr("user", user))
+		//then
 		.andExpect(status().isFound())
 		.andExpect(view().name("redirect:/"));
 
@@ -146,7 +147,7 @@ public class ProfileControllerTest {
 
 	@Test
 	public void shouldRejectChange_whenUserDetailsNotValidated() throws Exception {
-
+		//given
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/jsp/view/");
 		viewResolver.setSuffix(".jsp");
@@ -155,10 +156,13 @@ public class ProfileControllerTest {
 				.build();
 
 		user.setPhoneNr("SA");
-
+		//when
 		this.mockMvc.perform(post("/profile/changed").flashAttr("user", user))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(model().attributeHasFieldErrors("user", "phoneNr"))
 		.andExpect(view().name("profile"));
+		
+		verify(userProfileService, never()).update(user);
 	}
 }

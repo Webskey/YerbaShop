@@ -34,10 +34,10 @@ import org.yerbashop.service.TakeOrderService;
 public class ProductsController{
 
 	@Autowired
-	ProductsService productsService;
+	private ProductsService productsService;
 
 	@Autowired
-	TakeOrderService takeOrderService;
+	private TakeOrderService takeOrderService;
 
 	@ModelAttribute("orderList")
 	private Set<Products> orderList(){
@@ -46,7 +46,7 @@ public class ProductsController{
 	}
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	public ModelAndView products(ModelMap model,HttpServletRequest req, HttpServletResponse resp) {
+	public ModelAndView products(ModelMap model, HttpServletRequest req, HttpServletResponse resp) {
 		if(req.getParameter("cat") != null)
 			model.addAttribute("products", productsService.getProductList().stream().filter(s -> s.getCategory().contains(req.getParameter("cat"))).collect(Collectors.toList()));
 		else {
@@ -57,8 +57,8 @@ public class ProductsController{
 
 	@RequestMapping(value = "/basket", method = RequestMethod.GET)
 	public ModelAndView basket(@ModelAttribute("orderList") HashSet<Products> orderList, Model model, HttpServletRequest req) {
-		model.addAttribute("orderList",orderList);
-		model.addAttribute("priceSum",orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
+		model.addAttribute("orderList", orderList);
+		model.addAttribute("priceSum" ,orderList.stream().map(p->p.getPrice()).reduce(0, Integer::sum));
 		return new ModelAndView("basket", "command", new Products());
 	}
 
@@ -78,7 +78,7 @@ public class ProductsController{
 
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public String order(@ModelAttribute("orderList") HashSet<Products> orderList, ModelMap model, Principal principal) {
-		takeOrderService.setOrder(principal.getName(),orderList);
+		takeOrderService.setOrder(principal.getName(), orderList);
 		takeOrderService.start();
 		orderList.removeAll(orderList);
 		return "order";

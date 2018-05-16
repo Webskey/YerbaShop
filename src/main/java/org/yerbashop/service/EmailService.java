@@ -16,11 +16,9 @@ import org.yerbashop.mailMessages.MessageCreator;
 public class EmailService{
 
 	@Autowired
-	JavaMailSender mailSender;
+	private JavaMailSender mailSender;
 
 	public void sendEmail(MessageCreator message) {
-
 		mailSender.send(message.getMessage());
-		System.out.println("Message Send...Hurrey");
 	}
 }

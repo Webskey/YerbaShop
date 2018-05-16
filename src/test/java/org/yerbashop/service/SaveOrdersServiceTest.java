@@ -2,6 +2,7 @@ package org.yerbashop.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -52,15 +53,32 @@ public class SaveOrdersServiceTest {
 
 	@Test
 	public void shouldSaveOrderList_whenAllGood() {
+		//given
 		doNothing().when(saveDao).save(any());
 		when(loadByIdDao.findUserById("username")).thenReturn(user);
 
 		Orders orders = new Orders();
 		orders.setProductsList(products);
 		orders.setUsers(user);
-
+		//when
 		saveOrdersService.saveOrders(userDTO, products);
-		
+		//then
 		verify(saveDao).save(orders);
+		verify(loadByIdDao).findUserById("username");
+	}
+	
+	@Test
+	public void shouldNotSaveOrderList_whenUsernameNull() {
+		//given
+		doNothing().when(saveDao).save(any());
+		when(loadByIdDao.findUserById("username")).thenReturn(null);
+		
+		Orders orders = new Orders();
+		orders.setProductsList(products);
+		orders.setUsers(user);
+		//when
+		saveOrdersService.saveOrders(userDTO, products);
+		//then
+		verify(saveDao, never()).save(orders);
 	}
 }

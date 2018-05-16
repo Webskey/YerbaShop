@@ -73,20 +73,20 @@ public class RegisterControllerTest {
 	}
 
 	@Test
-	public void shouldBeInstanceOfUserDTO_whenCalledModelInRegister() throws Exception{
-
+	public void shouldReturnInstanceOfUsersValidateClassAttribute_whenRegisterFormCalled() throws Exception{
+		//when
 		this.mockMvc.perform(get("/register"))
-		//.andDo(MockMvcResultHandlers.print())
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("register"))
 		.andExpect(model().attribute("user", instanceOf(UsersValidate.class)));
 	}
 
 	@Test
-	public void shouldFailValidation_whenUsernameWrong() throws Exception{
-
-		this.mockMvc.perform(post("/reg").param("username","F").flashAttr("user", user))
-		//.andDo(MockMvcResultHandlers.print())
+	public void shouldFailValidation_whenUsernameIncorrect() throws Exception{
+		//when
+		this.mockMvc.perform(post("/reg").param("username", "F").flashAttr("user", user))
+		//then
 		.andExpect(model().attributeHasFieldErrors("user", "username"))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
 		.andExpect(view().name("register"))
@@ -94,10 +94,10 @@ public class RegisterControllerTest {
 	}
 
 	@Test
-	public void shouldFailValidation_whenPasswordeWrong() throws Exception{
-
-		this.mockMvc.perform(post("/reg").param("password","F").flashAttr("user", user))
-		//.andDo(MockMvcResultHandlers.print())
+	public void shouldFailValidation_whenPasswordIncorrect() throws Exception{
+		//when
+		this.mockMvc.perform(post("/reg").param("password", "F").flashAttr("user", user))
+		//then
 		.andExpect(model().attributeHasFieldErrors("user", "password"))
 		.andExpect(model().attribute("user", hasProperty("username", is("username"))))
 		.andExpect(view().name("register"))
@@ -105,10 +105,10 @@ public class RegisterControllerTest {
 	}
 
 	@Test
-	public void shouldFailValidation_whenEmailWrong() throws Exception{
-
-		this.mockMvc.perform(post("/reg").param("email","F").flashAttr("user", user))
-		//.andDo(MockMvcResultHandlers.print())
+	public void shouldFailValidation_whenEmailIncorrect() throws Exception{
+		//when
+		this.mockMvc.perform(post("/reg").param("email", "F").flashAttr("user", user))
+		//then
 		.andExpect(model().attributeHasFieldErrors("user", "email"))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
 		.andExpect(view().name("register"))
@@ -116,7 +116,8 @@ public class RegisterControllerTest {
 	}
 
 	@Test
-	public void shouldPassValidation_whenAllGood() throws Exception{
+	public void shouldPassValidation_whenUserValidated() throws Exception{
+		//given
 		doAnswer((invocation)->{
 			((Runnable) invocation.getArguments()[0]).run();
 			return null;
@@ -124,8 +125,9 @@ public class RegisterControllerTest {
 
 		doNothing().when(emailService).sendEmail(any());
 		doNothing().when(userRegisterService).register(any());
-
+		//when
 		this.mockMvc.perform(post("/reg").flashAttr("user", user))
+		//then
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
 		.andExpect(model().attributeHasNoErrors("user"))
 		.andExpect(view().name("reg"))
@@ -136,11 +138,12 @@ public class RegisterControllerTest {
 	}
 
 	@Test
-	public void shouldThrowUnsupportedOperationException_whenUserAlreadyExists()throws Exception{
+	public void shouldRejectValidationAndFailRegistration_whenUsernameAlreadyExists()throws Exception{
+		//given
 		doThrow(org.hibernate.exception.ConstraintViolationException.class).when(userRegisterService).register(any());
-
+		//when
 		this.mockMvc.perform(post("/reg").flashAttr("user", user))
-		//.andDo(MockMvcResultHandlers.print())
+		//then
 		.andExpect(model().attributeHasFieldErrors("user", "username"))
 		.andExpect(model().attribute("user", hasProperty("password", is("password"))))
 		.andExpect(view().name("register"))

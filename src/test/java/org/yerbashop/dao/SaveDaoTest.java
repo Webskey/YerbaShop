@@ -79,7 +79,9 @@ public class SaveDaoTest {
 
 	@Test(expected=javax.persistence.PersistenceException.class)
 	public void shouldThrow_whenUsernameAlreadyExists() {
+		//when
 		saveDao.save(user);
 		transaction.commit();
+		//then PersistenceException thrown
 	}
 }

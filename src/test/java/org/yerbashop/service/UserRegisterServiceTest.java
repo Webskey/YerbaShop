@@ -38,27 +38,29 @@ public class UserRegisterServiceTest {
 
 	@Test
 	public void shouldMatchUsersDetailsExceptPassword_whenAllDataProvidedCorrectly()throws Exception{
+		//given
 		doNothing().when(saveDao).save(any());
-
+		//when
 		userRegisterService.register(userValidate);
-
-		assertEquals(userValidate.getUsername(),userRegisterService.getUsers().getUsername());
-		assertEquals(userValidate.getFirstname(),userRegisterService.getUsers().getFirstname());
-		assertEquals(userValidate.getLastname(),userRegisterService.getUsers().getLastname());
-		assertEquals(userValidate.getEmail(),userRegisterService.getUsers().getEmail());
-		assertEquals(userValidate.getPhoneNr(),userRegisterService.getUsers().getPhoneNr());
-		assertEquals(userValidate.getAdress(),userRegisterService.getUsers().getAdress());
-		assertNotEquals(userValidate.getPassword(),userRegisterService.getUsers().getPassword());
+		//then
+		assertEquals(userValidate.getUsername(), userRegisterService.getUsers().getUsername());
+		assertEquals(userValidate.getFirstname(), userRegisterService.getUsers().getFirstname());
+		assertEquals(userValidate.getLastname(), userRegisterService.getUsers().getLastname());
+		assertEquals(userValidate.getEmail(), userRegisterService.getUsers().getEmail());
+		assertEquals(userValidate.getPhoneNr(), userRegisterService.getUsers().getPhoneNr());
+		assertEquals(userValidate.getAdress(), userRegisterService.getUsers().getAdress());
+		assertNotEquals(userValidate.getPassword(), userRegisterService.getUsers().getPassword());
 
 		verify(saveDao, times(2)).save(any());
 	}
 
 	@Test
 	public void shouldReturnUsersRoles_whenMethodSaveInvoked()throws Exception {
+		//given
 		doNothing().when(saveDao).save(any());
-
+		//when
 		userRegisterService.register(userValidate);
-
+		//then
 		assertEquals(userRegisterService.getUsers(),userRegisterService.getUserRoles().getUsers());
 		assertEquals(userValidate.getUsername(),userRegisterService.getUserRoles().getUsers().getUsername());
 		assertEquals("ROLE_USER",userRegisterService.getUserRoles().getRole());
@@ -66,15 +68,11 @@ public class UserRegisterServiceTest {
 		verify(saveDao, times(2)).save(any());
 	}
 
-	@Test(expected = ConstraintViolationException.class)
-	public void shouldConstraintViolationException_whenUserAlreadytExists() throws Exception{
-		doThrow(ConstraintViolationException.class).when(saveDao).save(any());
-		userRegisterService.register(userValidate);
-	}
-
 	@Test(expected = NullPointerException.class)
-	public void shouldNullPointerException_whenPassedNull() throws Exception{
+	public void shouldThrowNullPointerException_whenUserNull() throws Exception{
+		//when
 		userRegisterService.register(null);
+		//then NullPointerException thrown
 	}
 
 }

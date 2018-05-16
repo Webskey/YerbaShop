@@ -32,7 +32,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.yerbashop.AppConfig;
@@ -68,10 +67,10 @@ public class ProductsControllerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		
+
 		ProductsBuilder productsBuilder = new ProductsBuilder();
 		products = productsBuilder.getProductsList();
-		
+
 		when(productsService.getProductList()).thenReturn(products);
 		when(principal.getName()).thenReturn("username");
 
@@ -86,8 +85,9 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldPassAllProductsAsModelAttribute_whenCalledProductsWithoutParametr() throws Exception{
-
+		//when
 		this.mockMvc.perform(get("/products"))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("products"))
 		.andExpect(model().attribute("products", is(products)))
@@ -99,8 +99,9 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldPassOnlyYerbasProductsAsModelAttribute_whenCalledProductsWithYerbaParametr() throws Exception{
-
+		//when
 		this.mockMvc.perform(get("/products?cat=Yerba"))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("products"))
 		.andExpect(model().attribute("products", hasSize(2)))
@@ -111,8 +112,9 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldPassOnlyGourdsProductsAsModelAttribute_whenCalledProductsWithGourdsParametr() throws Exception{
-
+		//when
 		this.mockMvc.perform(get("/products?cat=gourds"))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("products"))
 		.andExpect(model().attribute("products", hasSize(1)))
@@ -122,11 +124,12 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldAddProductToBasket_whenAddToBasketPostMethodCalled() throws Exception{
-
+		//when
 		this.mockMvc.perform(post("/add-to-basket").flashAttr("Products", products.get(0)).flashAttr("orderList", orderList))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("add-to-basket"))
-		.andExpect(model().attribute("productAdded",products.get(0)))
+		.andExpect(model().attribute("productAdded", products.get(0)))
 		.andExpect(forwardedUrl("/WEB-INF/jsp/view/add-to-basket.jsp"));
 
 		verify(orderList, times(1)).add(products.get(0));
@@ -135,21 +138,25 @@ public class ProductsControllerTest {
 
 	@Test
 	public void shouldRemoveProductFromBasket_whenRemoveFromBasketPostMethodCalled() throws Exception{
+		//given
 		orderList.addAll(products);
-
+		//when
 		this.mockMvc.perform(post("/remove-from-basket").flashAttr("Products", products.get(0)).flashAttr("orderList", orderList))
+		//then
 		.andExpect(redirectedUrl("basket"))
 		.andExpect(view().name("redirect:basket"));
 
 		verify(orderList, times(1)).remove(products.get(0));
-		assertEquals(orderList.size(),2);
+		assertEquals(orderList.size(), 2);
 	}
 
 	@Test
 	public void shouldReturnOrderListAsModelAttr_whenBasketMethodCalled() throws Exception{
+		//given
 		orderList.addAll(products);
-
+		//when
 		this.mockMvc.perform(get("/basket").flashAttr("orderList", orderList))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("basket"))
 		.andExpect(model().attribute("orderList", hasSize(3)))
@@ -159,9 +166,10 @@ public class ProductsControllerTest {
 	}
 
 	@Test
-	public void shouldReturnNothing_whenBasketMethodCalledWithEmptyList() throws Exception{
-
+	public void shouldReturnEmptyList_whenBasketMethodCalledWithEmptyProductsList() throws Exception{
+		//when
 		this.mockMvc.perform(get("/basket"))
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("basket"))
 		.andExpect(model().attribute("orderList", hasSize(0)))
@@ -170,16 +178,18 @@ public class ProductsControllerTest {
 	}
 
 	@Test
-	public void shouldMakeOrderThings_whenOrdercalled() throws Exception {
+	public void shouldCallOrderServiceAndClearBasketList_whenOrderMade() throws Exception {
+		//given
 		orderList.addAll(products);
-
+		//when
 		this.mockMvc.perform(post("/order").principal(principal).flashAttr("orderList", orderList))
-		.andDo(MockMvcResultHandlers.print())
+		//then
 		.andExpect(status().isOk())
 		.andExpect(view().name("order"))
 		.andExpect(forwardedUrl("/WEB-INF/jsp/view/order.jsp"));
 
 		verify(takeOrderService).setOrder("username", orderList);
-		assertEquals(orderList.size(),0);
+		verify(takeOrderService).start();
+		assertEquals(orderList.size(), 0);
 	}
 } 

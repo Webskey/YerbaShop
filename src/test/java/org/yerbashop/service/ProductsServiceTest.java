@@ -34,16 +34,25 @@ public class ProductsServiceTest {
 	}	
 
 	@Test
-	public void shouldGiveList_whenMethodCalledCorrectly(){
+	public void shouldReturnProdcutsList_whenMethodCalledCorrectly(){
+		//given
 		when(productsDao.getAll()).thenReturn(productsList);
-		assertEquals(productsService.getProductList(), productsList);
-		assertEquals(productsList.get(0).getName(),"Yerba Mate");
+		//when
+		List<Products> serviceProductsList = productsService.getProductList();
+		//then
+		assertEquals(serviceProductsList, productsList);
+		assertEquals(serviceProductsList.get(1).getPrice(), productsList.get(1).getPrice());
+		assertEquals(productsList.get(0).getName(), "Yerba Mate");
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void shouldThrowNullPointerException_whenListWasNotInitialized() {
+		//given
 		List<Products> productsLists = null;
 		when(productsDao.getAll()).thenReturn(productsLists);
-		assertNull(productsService.getProductList().get(0));
+		//when
+		List<Products> serviceProductsList = productsService.getProductList();
+		//then
+		assertNull(serviceProductsList.get(3));
 	}
 }

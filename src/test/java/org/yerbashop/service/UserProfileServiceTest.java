@@ -31,12 +31,16 @@ public class UserProfileServiceTest {
 	public void setUp() {
 		UsersModelBuilder userModelBuilder1 = new UsersModelBuilder(Users.class);
 		user = (Users) userModelBuilder1.getObject();
-		when(userDetailsDao.findUserById("Username")).thenReturn(user);
+		when(userDetailsDao.findUserById("username")).thenReturn(user);
 	}
 
 	@Test
-	public void shouldPass_whenUserExists() {		
-		userDTO = userProfileService.getUser("Username");
+	public void shouldReturnUserDetails_whenUserExists() {		
+		//given
+		String username = "username";
+		//when
+		userDTO = userProfileService.getUser(username);
+		//then
 		assertEquals(userDTO.getClass(), UsersDTO.class);	
 		assertEquals(userDTO.getOrders().isEmpty(), true);
 		assertEquals(userDTO.getFirstname(), "firstname");			
@@ -44,13 +48,21 @@ public class UserProfileServiceTest {
 
 	@Test(expected = NullPointerException.class)
 	public void shouldThrowNullPointerException_whenUserDoesNotExist() {
-		UsersDTO nullUser = userProfileService.getUser("BadUser");
+		//given
+		String username = "W R O N G";
+		//when
+		UsersDTO nullUser = userProfileService.getUser(username);
+		//then
 		assertNull(nullUser.getUsername());
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void shouldThrowNullPointerException_whenPassedNull() {
-		UsersDTO nullUser = userProfileService.getUser(null);
+	public void shouldThrowNullPointerException_whenUserNull() {
+		//given
+		String username = null;
+		//when
+		UsersDTO nullUser = userProfileService.getUser(username);
+		//then
 		assertNull(nullUser.getUsername());
 	}
 }
