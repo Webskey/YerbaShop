@@ -1,5 +1,6 @@
 # YerbaShop
-## E-commerce website project
+## E-commerce website project.
+### Features: registration - validation, password encoding, welcome email sending, saving user details into database; user authorization; logged users enable to add products into basket, view previous orders, see and change profile details or make orders - ordered product list send via email to user and admin, then saved into database.
 
 ## [Documentation](https://webskey.github.io/YerbaShop/)
 
@@ -12,6 +13,7 @@
 * Hibernate Validator 5.3
 
 #### Front-end:
+* JSP
 * Apache Tiles 3
 * HTML5
 * CSS3
@@ -21,9 +23,9 @@
 * Hibernate ORM 5.2
 
 #### Tools:
-* Maven 4
-* Apache Tomcat 9
-* Eclipse Oxygen.3
+* Maven
+* Apache Tomcat
+* Eclipse
 
 #### Testing Technologies:
 * JUnit 4
@@ -31,6 +33,7 @@
 * Hamcrest 1.3
 * Spring MVC Test 5
 * Spring Security Test 5
+* GreenMail 1.5.7
 
 
 ## TODO:
@@ -41,6 +44,8 @@
 * Add remember-me feature
 * Logs with log4j
 * ~~Add Update/Change user profile details(firstname, adress etc.) feature~~
+
+## Screens:
 
 ### Index page
 <img src="https://i.imgur.com/9NMIbP0.jpg" alt="Index page" height="200" width="300">
